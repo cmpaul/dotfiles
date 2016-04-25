@@ -527,20 +527,6 @@ sudo mdutil -i on / > /dev/null
 sudo mdutil -E / > /dev/null
 
 ###############################################################################
-# Terminal & iTerm 2                                                          #
-###############################################################################
-
-# Install iTerm2 Fonts
-cp "../iterm2/*.otf" /Library/Fonts/
-
-# Install pretty iTerm colors
-open "../iterm2/presets/Argonaut.itermcolors"
-# TODO: Iterate over all files in ../iterm/presets?
-
-# Import saved iterm2 settings
-defaults import com.googlecode.iterm2 "../iterm2/com.googlecode.iterm2.plist"
-
-###############################################################################
 # Time Machine                                                                #
 ###############################################################################
 
