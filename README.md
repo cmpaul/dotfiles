@@ -4,14 +4,14 @@ Your dotfiles are how you personalize your system. These are mine, forked from [
 
 ## Installation
 
-> Note: Unless you're me, you should probably fork and modify this prior to installing. 
+> Note: Unless you're me, you should probably fork and modify this prior to installing.
 
 Run:
 
 ```sh
 git clone https://github.com/cmpaul/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-script/bootstrap
+script/bootstrap.sh
 ```
 
 This will symlink the appropriate files in `.dotfiles` to your home directory.
