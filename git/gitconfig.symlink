@@ -19,8 +19,13 @@
         editor = vim
 [apply]
         whitespace = nowarn
+[merge]
+        tool = bc3
 [mergetool]
         keepBackup = false
+        bc3 = trustExitCode
+[diff]
+        tool = bc3
 [difftool]
         prompt = false
 [help]
