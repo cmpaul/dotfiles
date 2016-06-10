@@ -69,7 +69,7 @@ latest_jdk_size=`du -s $latest_jdk | awk '{print $1}'`
 
 # figure out how big it is
 # (diskutil expects the number of 512 bytes sectors to be allocated)
-kb=`echo "$latest_jdk_size + (512 - ($latest_jdk_size % 512))" | bc`
+kb=`echo "($latest_jdk_size + (512 - ($latest_jdk_size % 512))) * 2" | bc`
 
 # mount the RAM disk
 diskutil erasevolume HFS+ $diskname `hdiutil attach -nomount ram://737280`
@@ -190,12 +190,10 @@ echo "Done"</string>
 						<string>4</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>499.500000:253.000000</string>
+				<string>499.500000:484.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
