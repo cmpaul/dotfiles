@@ -1,0 +1,36 @@
+# Path stuffs
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export DISABLE_AUTO_TITLE=true
+export TERM=xterm-256color
+export GOROOT=/usr/local/Cellar/go/1.2.1/libexec
+export GOPATH=$HOME/go
+export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"
+export EXTERNAL_IP=`wget http://ipinfo.io/ip -qO -`
+export JAVA_HOME="/Volumes/JDKRAMDISK/jdk/Contents/Home"
+export PATH="$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:~/.dotfiles/git/bin:$PATH"
+
+# LS colors
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+export LESS="-F -X -R"
+alias ls='ls -GFh'
+
+# Shell prompt
+function _update_ps1() {
+    PS1="$(~/powerline-shell.py $? 2> /dev/null)"
+}
+if [ "$TERM" != "linux" ]; then
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
+# Node Version Manager
+export NVM_DIR="/Users/admin/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# Bash completion
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
+
+

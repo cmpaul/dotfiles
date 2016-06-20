@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Command aliases
+alias git="hub"
+alias lsm="ls -lhFGHot"
+alias rmorig="find . -name \"*.orig\" -type f -delete"
+
+# SSH aliases
+alias hipchat-bot="ssh -i \"/Users/cpaul/.ssh/hipchat-bot.pem\" ubuntu@ec2-52-8-180-122.us-west-1.compute.amazonaws.com"
+
+# Jellosign aliases
+alias jello="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug"
+alias jellostaging="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.staging-hellosign.com -Dhellosign.oauth.base.url=https://www.staging-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.staging-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
+alias jelloqa="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.qa-hellosign.com -Dhellosign.oauth.base.url=https://www.qa-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.qa-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
+alias jellodev="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.dev-hellosign.com -Dhellosign.oauth.base.url=https://www.dev-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.dev-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
+
+# Postgres aliases
+alias postgres.status="pg_ctl status -D /usr/local/var/postgres"
+alias postgres.stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
+alias postgres.start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
