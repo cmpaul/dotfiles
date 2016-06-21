@@ -33,7 +33,7 @@ alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pa
 
 # Show/hide hidden files in Mac OS
 alias showall='defaults write com.apple.finder AppleShowAllFiles true; killall Finder /System/Library/CoreServices/Finder.app'
-alias hideall='defaults write com.apple.finder AppleShowAllFiles false; killall Finder /System/Library/CoreServices/Finder.app' 
+alias hideall='defaults write com.apple.finder AppleShowAllFiles false; killall Finder /System/Library/CoreServices/Finder.app'
 
 # FUNCTIONS
 # ==================================================================
