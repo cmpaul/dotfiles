@@ -19,3 +19,6 @@ alias jellogrok="ngrok http -subdomain=jellosign 8080"
 alias postgres.status="pg_ctl status -D /usr/local/var/postgres"
 alias postgres.stop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias postgres.start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
+
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
