@@ -43,4 +43,7 @@ if [ -f ~/.bash_aliases ]; then
 . ~/.bash_aliases
 fi
 
+# Make bash check its window size after a process completes
+shopt -s checkwinsize
+
 archey

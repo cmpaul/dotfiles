@@ -3,6 +3,7 @@ cask_args appdir: '/Applications'
 tap 'homebrew/bundle'
 tap 'thoughtbot/formulae'
 
+brew 'ack'
 brew 'ant'
 brew 'archey'
 brew 'atk'

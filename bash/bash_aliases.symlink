@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# ALIASES
+# ==================================================================
+
 # Command aliases
 # Use `hub` as our git wrapper:
 #   http://defunkt.github.com/hub/
@@ -28,11 +31,18 @@ alias postgres.start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgr
 # Pipe my public key to my clipboard.
 alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 
+# Show/hide hidden files in Mac OS
+alias showall='defaults write com.apple.finder AppleShowAllFiles true; killall Finder /System/Library/CoreServices/Finder.app'
+alias hideall='defaults write com.apple.finder AppleShowAllFiles false; killall Finder /System/Library/CoreServices/Finder.app' 
+
+# FUNCTIONS
+# ==================================================================
+
 # Usage: extract <file>
 # Description: extracts archived files / mounts disk images
 # Note: .dmg/hdiutil is Mac OS X-specific.
 # credit: http://nparikh.org/notes/zshrc.txt
-function extract () {
+extract() {
     if [ -z $1 ]; then
       echo "Usage: extract <file>"
     else
@@ -58,4 +68,42 @@ function extract () {
         echo "'$1' is not a valid file"
       fi
     fi
+}
+
+# Change directory creating it if it doesn't exists.
+cdf() {
+  if [ ! -d $1 ]; then
+    mkdir -p $1;
+  fi
+  cd $1;
+}
+
+# Repeat a command N times
+# From: http://www.stefanoforenza.com/how-to-repeat-a-shell-command-n-times/
+repeat() {
+    n=$1
+    shift
+    while [ $(( n -= 1 )) -ge 0 ]
+    do
+        "$@"
+    done
+}
+
+# Duplicate a file adding the extention .bak_[timestamp]
+backup() {
+  if [ -z "${1}" ]
+  then
+    echo "Missing file to backup. Nothing to do."
+    return 1
+  fi
+  BACKUP_FILENAME="${1}.bak_$(date +"%Y%m%d%H%M%S")";
+  cp "${1}" "${BACKUP_FILENAME}" && echo "Backup created: ${BACKUP_FILENAME}";
+}
+
+# List files (containing $2 in the name) containing a string ($1) begining from the current dir
+# "${@:3}" Stands for all parameters from the third (included) on. (From: http://wiki.bash-hackers.org/scripting/posparams#mass_usage)
+hgrep() {
+  if [ $# -gt 0 ]; then
+    egrep "$1" -i -n -r . --colour --include "*$2*" "${@:3}"
+  fi
 }
