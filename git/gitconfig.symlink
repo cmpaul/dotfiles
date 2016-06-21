@@ -4,11 +4,18 @@
 [hub]
         protocol = https
 [alias]
-        co = checkout
-        promote = !$DOTFILES/bin/git-promote
-        wtf     = !$DOTFILES/bin/git-wtf
-        rank-contributors = !$DOTFILES/bin/git-rank-contributors
-        count   = !git shortlog -sn
+        co         = checkout
+        count      = !git shortlog -sn
+        cleanup    = !git gc && $DOTFILES/bin/git-prune
+        cpbranch   = !$DOTFILES/bin/git-copy-branch-name
+        credit     = !$DOTFILES/bin/git-credit
+        nuke       = !$DOTFILES/bin/git-nuke
+        credit     = !$DOTFILES/bin/git-credit
+        promote    = !$DOTFILES/bin/git-promote
+        track      = !$DOTFILES/bin/git-track
+        undo       = !$DOTFILES/bin/git-undo
+        up         = !$DOTFILES/bin/git-up
+        wtf        = !$DOTFILES/bin/git-wtf
 [color]
         diff = auto
         status = auto

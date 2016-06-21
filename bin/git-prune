@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Delete all local branches that have been merged into HEAD.
+
+branches_to_delete=`git branch --merged | grep -v '^*' | grep -v 'master' | tr -d '\n'`
+if [ -z $branches_to_delete ]
+then
+  echo "You're all up-to-date!"
+else
+  git branch -d $branches_to_delete
+fi
