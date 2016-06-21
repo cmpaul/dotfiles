@@ -5,7 +5,7 @@
 ###############################################################################
 
 # Install iTerm2 Fonts
-cp -v $DOTFILES/iterm2/*.otf /Library/Fonts/
+cp -v -n $DOTFILES/iterm2/*.otf /Library/Fonts/
 
 # Install pretty iTerm colors
 # TODO: Iterate over all files in ../iterm/presets?
