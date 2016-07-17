@@ -10,6 +10,8 @@
 	<true/>
 	<key>AllowClipboardAccess</key>
 	<false/>
+	<key>AlternateMouseScroll</key>
+	<true/>
 	<key>AnimateDimming</key>
 	<false/>
 	<key>AppleAntiAliasingThreshold</key>
@@ -32097,8 +32099,12 @@
 	<true/>
 	<key>MaxVertically</key>
 	<false/>
+	<key>NSColorPanelMode</key>
+	<string>7</string>
 	<key>NSFontPanelAttributes</key>
 	<string>1, 4</string>
+	<key>NSFontPanelPreviewHeight</key>
+	<real>0.0</real>
 	<key>NSNavLastRootDirectory</key>
 	<string>~/Documents</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
@@ -32130,23 +32136,36 @@
 	<array/>
 	<key>NSTableView Sort Ordering KeyBingingTable</key>
 	<array/>
+	<key>NSToolbar Configuration Terminal Toolbar</key>
+	<dict>
+		<key>TB Display Mode</key>
+		<integer>1</integer>
+		<key>TB Icon Size Mode</key>
+		<integer>1</integer>
+		<key>TB Is Shown</key>
+		<integer>0</integer>
+		<key>TB Size Mode</key>
+		<integer>1</integer>
+	</dict>
 	<key>NSToolbar Configuration com.apple.NSColorPanel</key>
 	<dict>
 		<key>TB Is Shown</key>
 		<integer>1</integer>
 	</dict>
+	<key>NSWindow Frame NSColorPanel</key>
+	<string>1057 351 228 309 0 0 1680 1027 </string>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>710 908 612 199 0 0 2560 1417 </string>
+	<string>452 179 699 564 0 0 1440 877 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>269 420 606 456 0 0 1440 877 </string>
-	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>410 364 620 392 0 0 1440 877 </string>
+	<string>358 421 606 456 0 0 1440 877 </string>
+	<key>NSWindow Frame SUStatusFrame</key>
+	<string>-912 561 384 129 -1440 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 4 1434 873 0 0 1440 877 </string>
+	<string>0 4 714 873 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>172 223 666 453 0 0 1440 877 </string>
+	<string>0 873 586 403 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>1280 32 1279 1378 0 0 2560 1417 </string>
+	<string>0 26 1440 852 0 0 1440 878 </string>
 	<key>NeverWarnAboutShortLivedSessions_B2C2FAF0-1029-493D-A7D7-31A8565F2910</key>
 	<true/>
 	<key>New Bookmarks</key>
@@ -36952,10 +36971,12 @@
 	<true/>
 	<key>NoSyncDoNotWarnBeforeMultilinePaste_selection</key>
 	<integer>0</integer>
+	<key>NoSyncHaveShownPromoWithId_4</key>
+	<true/>
 	<key>NoSyncInstallationId</key>
-	<string>09503A65-03AF-4A77-ACEE-F9AB57755F85</string>
+	<string>F0CA8987-1D3C-44F1-A7ED-06A9057A3343</string>
 	<key>NoSyncLastTipTime</key>
-	<real>488177773.00593698</real>
+	<real>488733382.343647</real>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -36963,7 +36984,11 @@
 	<key>NoSyncPermissionToShowTip</key>
 	<true/>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
-	<real>486775683.56385499</real>
+	<real>486498351.53543502</real>
+	<key>NoSyncTimeOfLastPromo</key>
+	<real>478062516.59012902</real>
+	<key>NoSyncTimeOfLastPromoDownload</key>
+	<real>486494513.40039498</real>
 	<key>NoSyncTipsDisabled</key>
 	<true/>
 	<key>NoSyncTipsToNotShow</key>
@@ -36971,6 +36996,11 @@
 		<string>000</string>
 		<string>0000</string>
 		<string>0001</string>
+		<string>0002</string>
+		<string>0003</string>
+		<string>0004</string>
+		<string>0005</string>
+		<string>0006</string>
 	</array>
 	<key>OnlyWhenMoreTabs</key>
 	<true/>
@@ -37018,7 +37048,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/admin/.dotfiles/iterm2</string>
+	<string>/Users/cpaul/.dotfiles/iterm2</string>
 	<key>PromptOnClose</key>
 	<true/>
 	<key>PromptOnQuit</key>
@@ -37029,18 +37059,18 @@
 	<integer>8</integer>
 	<key>RightOption</key>
 	<integer>3</integer>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedAlternateAppNameKey</key>
 	<string>iTerm</string>
 	<key>SUFeedURL</key>
-	<string>https://iterm2.com/appcasts/final.xml?shard=13</string>
+	<string>https://iterm2.com/appcasts/final.xml?shard=60</string>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-06-22T17:57:15Z</date>
-	<key>SUSendProfileInfo</key>
-	<false/>
+	<date>2016-07-17T03:42:33Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -37096,7 +37126,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.0.2</string>
+	<string>3.0.4</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
