@@ -40,7 +40,12 @@ fi
 
 # Load bash_aliases
 if [ -f ~/.bash_aliases ]; then
-. ~/.bash_aliases
+  . ~/.bash_aliases
+fi
+
+# Load local bash profile
+if [ -f ~/.bashrc ]; then
+  source ~/.bashrc
 fi
 
 # Make bash check its window size after a process completes
