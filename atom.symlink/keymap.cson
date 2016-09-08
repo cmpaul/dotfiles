@@ -1,0 +1,13 @@
+'atom-workspace atom-text-editor':
+  'cmd-[': 'unset!'
+  'cmd-]': 'unset!'
+
+'atom-workspace atom-text-editor:not([mini])':
+  'cmd-[': 'unset!'
+  'cmd-]': 'unset!'
+
+'atom-workspace':
+  'cmd-]':      'cursor-history:next'
+  'cmd-[':      'cursor-history:prev'
+  'ctrl-cmd-]': 'cursor-history:next-within-editor'
+  'ctrl-cmd-[': 'cursor-history:prev-within-editor'
