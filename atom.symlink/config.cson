@@ -15,6 +15,10 @@
       "tmp"
       "vendor"
     ]
+    themes: [
+      "atom-dark-ui"
+      "atom-dark-syntax"
+    ]
   editor:
     fontFamily: "Menlo"
     fontSize: 13

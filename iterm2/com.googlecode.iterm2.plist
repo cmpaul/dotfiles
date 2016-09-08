@@ -32157,11 +32157,11 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>452 179 699 564 0 0 1440 877 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>358 421 606 456 0 0 1440 877 </string>
+	<string>525 571 606 456 0 0 1680 1027 </string>
 	<key>NSWindow Frame SUStatusFrame</key>
 	<string>-912 561 384 129 -1440 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 4 714 873 0 0 1440 877 </string>
+	<string>846 4 834 1023 0 0 1680 1027 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>0 873 586 403 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
@@ -37049,6 +37049,8 @@
 	</dict>
 	<key>PrefsCustomFolder</key>
 	<string>/Users/cpaul/.dotfiles/iterm2</string>
+	<key>Print In Black And White</key>
+	<true/>
 	<key>PromptOnClose</key>
 	<true/>
 	<key>PromptOnQuit</key>
@@ -37070,7 +37072,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-07-17T03:42:33Z</date>
+	<date>2016-07-19T13:32:45Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
