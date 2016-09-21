@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # ~/.osx — http://mths.be/osx
+set -x
 
 # Ask for the administrator password upfront
 sudo -v
@@ -173,6 +174,7 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Set a blazingly fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 0
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Set language and text formats
 # Note: if you’re in the US, replace `EUR` with `USD`, `Centimeters` with
