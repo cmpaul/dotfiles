@@ -46,6 +46,7 @@ fi
 # Load local bash profile
 if [ -f ~/.bashrc ]; then
   source ~/.bashrc
+  source ~/.profile
 fi
 
 # Link pinentry and agent together
@@ -60,3 +61,5 @@ fi
 shopt -s checkwinsize
 
 archey
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
