@@ -14,6 +14,8 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
+echo "HOSTNAME: $dotfiles_hostname"
+
 sudo scutil --set ComputerName "Chris Paul's MacBook Pro"
 sudo scutil --set HostName "Chris-Pauls-MacBook-Pro"
 sudo scutil --set LocalHostName "Chris-Pauls-MacBook-Pro"
@@ -24,6 +26,10 @@ sudo pmset -a standbydelay 86400
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
+
+# Disable Guest Login
+sudo defaults write /Library/Preferences/com.apple.AppleFileServer guestAccess -bool NO
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server AllowGuestAccess -bool NO
 
 # Menu bar: disable transparency
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
