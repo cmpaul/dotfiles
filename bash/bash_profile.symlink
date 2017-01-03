@@ -49,6 +49,9 @@ if [ -f ~/.bashrc ]; then
   source ~/.profile
 fi
 
+# Load Python virtualenv and virtualenvwrapper to manage different versions/env
+source /usr/local/bin/virtualenvwrapper.sh
+
 # Link pinentry and agent together
 if test -f ~/.gnupg/.gpg-agent-info -a -n "$(pgrep gpg-agent)"; then
   source ~/.gnupg/.gpg-agent-info
@@ -60,6 +63,9 @@ fi
 # Make bash check its window size after a process completes
 shopt -s checkwinsize
 
-archey
+# FIXME: Sadly, this isn't working right now :(
+# gtimeout 5 archey
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"

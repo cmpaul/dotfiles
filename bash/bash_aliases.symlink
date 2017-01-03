@@ -22,9 +22,9 @@ alias hipchat-bot="ssh -i \"/Users/cpaul/.ssh/hipchat-bot.pem\" ubuntu@ec2-52-8-
 
 # Jellosign aliases
 alias jello="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug"
-alias jellostaging="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.staging-hellosign.com -Dhellosign.oauth.base.url=https://www.staging-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.staging-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
-alias jelloqa="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.qa-hellosign.com -Dhellosign.oauth.base.url=https://www.qa-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.qa-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
-alias jellodev="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.dev-hellosign.com -Dhellosign.oauth.base.url=https://www.dev-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.dev-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
+alias jellostaging="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.staging-hellosign.com/v3 -Dhellosign.oauth.base.url=https://www.staging-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.staging-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
+alias jelloqa="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.qa-hellosign.com/v3 -Dhellosign.oauth.base.url=https://www.qa-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.qa-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
+alias jellodev="cd ~/dev/jellosign; mvn clean jetty:run -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -Dhellosign.base.url=https://api.dev-hellosign.com/v3 -Dhellosign.oauth.base.url=https://www.dev-hellosign.com/oauth/token -Dhellosign.oauth.authorize.url=https://www.dev-hellosign.com/oauth/authorize -Dhellosign.disable.ssl=true"
 alias jellogrok="ngrok http -subdomain=jellosign 8080"
 
 # Postgres aliases

@@ -1,4 +1,7 @@
 "*":
+  "atom-beautify":
+    general:
+      _analyticsUserId: "8d7beab7-18b0-45ca-b34e-a4ceaece82dd"
   core:
     disabledPackages: [
       "background-tips"
@@ -15,16 +18,18 @@
       "tmp"
       "vendor"
     ]
+    telemetryConsent: "no"
     themes: [
       "atom-dark-ui"
       "atom-dark-syntax"
     ]
   editor:
     fontFamily: "Menlo"
-    fontSize: 13
+    fontSize: 12
     invisibles: {}
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
+    tabLength: 4
   "go-plus":
     goPath: "/Users/holman/Code/go"
   "release-notes":
