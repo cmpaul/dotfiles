@@ -27,6 +27,12 @@ fail () {
   exit
 }
 
+setup_hostname() {
+  user ' - What should the hostname be?'
+  read -e dotfiles_hostname
+  export dotfiles_hostname
+}
+
 setup_gitconfig () {
   if ! [ -f git/gitconfig.local.symlink ]
   then
@@ -42,7 +48,6 @@ setup_gitconfig () {
     read -e git_authorname
     user ' - What is your github author email?'
     read -e git_authoremail
-
     sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
 
     success 'gitconfig'
@@ -137,6 +142,7 @@ install_dotfiles () {
   done
 }
 
+setup_hostname
 setup_gitconfig
 install_dotfiles
 

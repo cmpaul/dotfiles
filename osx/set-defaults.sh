@@ -14,16 +14,20 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ###############################################################################
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "Chris Paul's MacBook Pro"
-sudo scutil --set HostName "Chris-Pauls-MacBook-Pro"
-sudo scutil --set LocalHostName "Chris-Pauls-MacBook-Pro"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "Chris Paul's MacBook Pro"
+sudo scutil --set ComputerName "$dotfiles_hostname"
+sudo scutil --set HostName "$dotfiles_hostname"
+sudo scutil --set LocalHostName "$dotfiles_hostname"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$dotfiles_hostname"
 
 # Set standby delay to 24 hours (default is 1 hour)
 sudo pmset -a standbydelay 86400
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
+
+# Disable Guest Login
+sudo defaults write /Library/Preferences/com.apple.AppleFileServer guestAccess -bool NO
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server AllowGuestAccess -bool NO
 
 # Menu bar: disable transparency
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
@@ -173,7 +177,7 @@ defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 0
+defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Set language and text formats
