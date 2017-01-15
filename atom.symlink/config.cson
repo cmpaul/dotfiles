@@ -1,4 +1,7 @@
 "*":
+  "atom-beautify":
+    general:
+      _analyticsUserId: "da6d494b-5dea-401d-b163-85a06ef32a36"
   core:
     disabledPackages: [
       "background-tips"
@@ -15,6 +18,7 @@
       "tmp"
       "vendor"
     ]
+    telemetryConsent: "limited"
     themes: [
       "atom-dark-ui"
       "atom-dark-syntax"
@@ -25,6 +29,7 @@
     invisibles: {}
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
+    tabLength: 4
   "go-plus":
     goPath: "/Users/holman/Code/go"
   "release-notes":
