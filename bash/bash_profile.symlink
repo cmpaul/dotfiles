@@ -69,5 +69,7 @@ shopt -s checkwinsize
 # gtimeout 5 archey
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# Initialize jenv
+if which jenv > /dev/null; then eval "$(jenv init -)"; fi
 export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
