@@ -15,6 +15,9 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 export LESS="-F -X -R"
 alias ls='ls -GFh'
 
+# Only record the most recent version of a command
+export HISTCONTROL=ignoreboth:erasedups
+
 # GRC colorizes nifty unix tools all over the place
 if [[ $(command -v grc) && $(command -v brew) ]]
 then
@@ -73,3 +76,8 @@ shopt -s checkwinsize
 # Initialize jenv
 if which jenv > /dev/null; then eval "$(jenv init -)"; fi
 export PATH="$HOME/.jenv/bin:$PATH"
+
+# Add command search
+stty -ixon
+
+archey
