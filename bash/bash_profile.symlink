@@ -1,3 +1,6 @@
+# Add SSH keys
+ssh-add -A 2> /dev/null;
+
 # Path stuffs
 export DOTFILES=$HOME/.dotfiles
 export LC_ALL=en_US.UTF-8
