@@ -9,7 +9,7 @@ export DISABLE_AUTO_TITLE=true
 export TERM=xterm-256color
 export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"
 export JAVA_HOME="/Volumes/JDKRAMDISK/jdk/Contents/Home"
-export PATH="$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$DOTFILES/bin:$PATH"
+export PATH="$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$DOTFILES/bin:$HOME/.local/bin:$PATH"
 export EDITOR='vim'
 
 # LS colors
@@ -43,6 +43,17 @@ export NVM_DIR="$HOME/.nvm"
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
 fi
+
+# Apex auto-complete
+_apex()  {
+  COMPREPLY=()
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local opts="$(apex autocomplete -- ${COMP_WORDS[@]:1})"
+  COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+  return 0
+}
+
+complete -F _apex apex
 
 # Load bash_aliases
 if [ -f ~/.bash_aliases ]; then
