@@ -20,8 +20,8 @@
     ]
     telemetryConsent: "limited"
     themes: [
-      "atom-dark-ui"
-      "atom-dark-syntax"
+      "one-dark-ui"
+      "base16-tomorrow-dark-theme"
     ]
   editor:
     fontFamily: "Menlo"
@@ -29,7 +29,6 @@
     invisibles: {}
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
-    tabLength: 4
   "go-plus":
     goPath: "/Users/holman/Code/go"
   "release-notes":

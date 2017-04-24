@@ -16,6 +16,7 @@ alias rmorig="find . -name \"*.orig\" -type f -delete"
 # Useful directories
 alias cdhf="cd ~/dev/hellofax"
 alias cdweb="cd ~/dev/hellosign-web"
+alias cdhw="cd ~/dev/smartforms"
 
 # SSH aliases
 alias hipchat-bot="ssh -i \"/Users/cpaul/.ssh/hipchat-bot.pem\" ubuntu@ec2-52-8-180-122.us-west-1.compute.amazonaws.com"
