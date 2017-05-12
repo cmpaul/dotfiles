@@ -2,6 +2,9 @@
   "atom-beautify":
     general:
       _analyticsUserId: "da6d494b-5dea-401d-b163-85a06ef32a36"
+  "autocomplete-elixir":
+    elixirPath: "/usr/local/bin/elixir"
+    erlangHome: "/usr/local/bin"
   core:
     disabledPackages: [
       "background-tips"
@@ -18,14 +21,16 @@
       "tmp"
       "vendor"
     ]
+    packagesWithKeymapsDisabled: [
+      "last-cursor-position"
+    ]
     telemetryConsent: "limited"
     themes: [
       "one-dark-ui"
       "base16-tomorrow-dark-theme"
     ]
   editor:
-    fontFamily: "Menlo"
-    fontSize: 13
+    fontFamily: "Fira Code"
     invisibles: {}
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
