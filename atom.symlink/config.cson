@@ -10,6 +10,7 @@
       "background-tips"
       "exception-reporting"
       "metrics"
+      "autocomplete-elixir"
     ]
     followSymlinks: false
     hideGitIgnoredFiles: true
