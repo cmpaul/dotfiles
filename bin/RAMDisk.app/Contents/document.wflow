@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>419</string>
+	<string>444.1</string>
 	<key>AMApplicationVersion</key>
-	<string>2.6</string>
+	<string>2.8</string>
 	<key>AMDocumentVersion</key>
 	<string>2</string>
 	<key>actions</key>
@@ -72,7 +72,7 @@ latest_jdk_size=`du -s $latest_jdk | awk '{print $1}'`
 kb=`echo "($latest_jdk_size + (512 - ($latest_jdk_size % 512))) * 2" | bc`
 
 # mount the RAM disk
-diskutil erasevolume HFS+ $diskname `hdiutil attach -nomount ram://737280`
+diskutil erasevolume HFS+ $diskname `hdiutil attach -nomount ram://$kb`
 
 # copy the JDK to the RAM disk
 if [ -d "/Volumes/$diskname" ]; then
@@ -193,7 +193,7 @@ echo "Done"</string>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>499.500000:484.000000</string>
+				<string>309.000000:612.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
