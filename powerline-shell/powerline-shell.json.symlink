@@ -1,0 +1,9 @@
+{
+  "segments": [
+    "ssh", 
+    "cwd", 
+    "git", 
+    "jobs", 
+    "root"
+  ]
+}
