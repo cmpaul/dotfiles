@@ -9,7 +9,10 @@ export DISABLE_AUTO_TITLE=true
 export TERM=xterm-256color
 export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"
 export JAVA_HOME="/Volumes/JDKRAMDISK/jdk/Contents/Home"
-export PATH="$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$DOTFILES/bin:$HOME/.local/bin:/usr/local/opt/python/libexec/bin:$PATH"
+export MONGO_PATH="/usr/local/opt/mongodb@3.4/bin"
+export PYTHON_HOME=/usr/local/opt/python/libexec/bin
+export VIRTUALENVWRAPPER_PYTHON=$PYTHON_HOME/python
+export PATH="$MONGO_PATH:$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$DOTFILES/bin:$HOME/.local/bin:$PYTHON_HOME:$PATH"
 export EDITOR='vim'
 
 # LS colors

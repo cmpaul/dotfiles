@@ -3,7 +3,6 @@
     "ssh", 
     "cwd", 
     "git", 
-    "jobs", 
-    "root"
+    "jobs"
   ]
 }
