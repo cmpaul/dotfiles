@@ -48,6 +48,9 @@ defaults write com.apple.systemuiserver menuExtras -array \
   "/System/Library/CoreServices/Menu Extras/Battery.menu" \
   "/System/Library/CoreServices/Menu Extras/Clock.menu"
 
+# Set the clock time format
+defaults write com.apple.menuextra.clock "DateFormat" 'EEE hh:mm:ss a'
+
 # Set highlight color to graphite
 defaults write NSGlobalDomain AppleHighlightColor -string "0.780400 0.815700 0.858800"
 
