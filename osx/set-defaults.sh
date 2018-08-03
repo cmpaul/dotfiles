@@ -275,7 +275,7 @@ defaults write NSGlobalDomain com.apple.springing.enabled -bool true
 defaults write NSGlobalDomain com.apple.springing.delay -float 0
 
 # Delete all .DS_Store files
-sudo find / -name ".DS_Store" -depth -exec rm {} \;
+# sudo find / -name ".DS_Store" -depth -exec rm {} \;
 
 # Avoid creating .DS_Store files for the current user from now on
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
