@@ -575,6 +575,15 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 hash tmutil &> /dev/null && sudo tmutil disablelocal
 
 ###############################################################################
+# Siri                                                                        #
+###############################################################################
+
+# Prevent Siri from loading
+defaults write com.apple.Siri StatusMenuVisible -bool false
+defaults write com.apple.Siri UserHasDeclinedEnable -bool true
+defaults write com.apple.assistant.support 'Assistant Enabled' 0
+
+###############################################################################
 # Activity Monitor                                                            #
 ###############################################################################
 
