@@ -32,9 +32,6 @@ sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.serve
 # Menu bar: disable transparency
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 
-# Set high contrast mode in Yosemite
-defaults write com.apple.universalaccess increaseContrast -bool true
-
 # Menu bar: hide the Time Machine, Volume, User, and Bluetooth icons
 for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
   defaults write "${domain}" dontAutoLoad -array \
@@ -52,7 +49,7 @@ defaults write com.apple.systemuiserver menuExtras -array \
 defaults write com.apple.menuextra.clock "DateFormat" 'EEE hh:mm:ss a'
 
 # Set highlight color to graphite
-defaults write NSGlobalDomain AppleHighlightColor -string "0.780400 0.815700 0.858800"
+defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745"
 
 # Set sidebar icon size to medium
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
@@ -183,7 +180,7 @@ defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 0
+defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Set language and text formats
