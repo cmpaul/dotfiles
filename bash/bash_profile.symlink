@@ -9,7 +9,7 @@ export DISABLE_AUTO_TITLE=true
 export TERM=xterm-256color
 export PYTHON_HOME="/usr/local/opt/python2"
 export VIRTUALENVWRAPPER_PYTHON="$PYTHON_HOME/bin/python"
-export PATH="$MONGO_PATH:$JAVA_HOME/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$DOTFILES/bin:$HOME/.local/bin:$PYTHON_HOME/bin:$PATH"
+export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$DOTFILES/bin:$HOME/.local/bin:$PYTHON_HOME/bin:$PATH"
 export EDITOR='vim'
 
 # LS colors
