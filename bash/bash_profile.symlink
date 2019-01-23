@@ -84,3 +84,6 @@ shopt -s checkwinsize
 
 # Add command search
 stty -ixon
+
+# Ruby (rbenv)
+eval "$(rbenv init -)"
