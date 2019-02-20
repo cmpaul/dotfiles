@@ -67,7 +67,9 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # Load Python virtualenv and virtualenvwrapper to manage different versions/env
-source /usr/local/bin/virtualenvwrapper.sh
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+  source /usr/local/bin/virtualenvwrapper.sh
+fi
 
 # Link pinentry and agent together
 if test -f ~/.gnupg/.gpg-agent-info -a -n "$(pgrep gpg-agent)"; then
@@ -84,6 +86,3 @@ shopt -s checkwinsize
 
 # Add command search
 stty -ixon
-
-# Ruby (rbenv)
-eval "$(rbenv init -)"
