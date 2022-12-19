@@ -1,8 +1,0 @@
-{
-  "segments": [
-    "ssh", 
-    "cwd", 
-    "git", 
-    "jobs"
-  ]
-}

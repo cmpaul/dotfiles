@@ -2,7 +2,7 @@
 [include]
         path = ~/.gitconfig.local
 [hub]
-        protocol = https
+        protocol = ssh
 [alias]
         co         = checkout
         count      = !git shortlog -sn
@@ -27,12 +27,12 @@
 [apply]
         whitespace = nowarn
 [merge]
-        tool = bc3
+        # tool = bc3
 [mergetool]
         keepBackup = false
         bc3 = trustExitCode
 [diff]
-        tool = bc3
+        # tool = bc3
 [difftool]
         prompt = false
 [help]
@@ -44,9 +44,9 @@
         # Setting to git 2.0 default to suppress warning message
         default = simple
 [user]
-	# signingkey = 45709EDC
+	signingkey = 779726D6596D2341
 [commit]
-	# gpgsign = true
+	gpgsign = true
 # so much color
 [color "diff"]
 	meta = yellow bold
@@ -72,5 +72,3 @@
 	log = diff-highlight | less
 	show = diff-highlight | less
 	diff = diff-highlight | less
-[user]
-	signingkey = F6CBF33A790F60CE

@@ -6,16 +6,22 @@
 # to make sure you're on the latest and greatest.
 export DOTFILES=$HOME/.dotfiles
 
+# Don't show last login date
+touch ~/.hushlogin
+
 # Set OS X defaults
 $DOTFILES/osx/set-defaults.sh
 
 # Install homebrew
 $DOTFILES/homebrew/install.sh 2>&1
 
-# Upgrade homebrew
+# Upgrade & upgrade homebrew
 echo "› brew update"
 brew update
+echo "› brew upgrade"
+brew upgrade
 
 # Install software
-echo "› $DOTFILES/script/install.sh"
-$DOTFILES/script/start.sh
+# I don't currently have any of these, so ignore for now
+# echo "› $DOTFILES/script/install.sh"
+# $DOTFILES/script/start.sh
