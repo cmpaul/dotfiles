@@ -16,6 +16,7 @@
         undo       = !$DOTFILES/bin/git-undo
         up         = !$DOTFILES/bin/git-up
         wtf        = !$DOTFILES/bin/git-wtf
+        fixup      = "!git add . && git commit --fixup=${1:-$(git rev-parse HEAD)} && GIT_EDITOR=true git rebase --interactive --autosquash ${1:-$(git rev-parse HEAD~2)}~1"
 [color]
         diff = auto
         status = auto
@@ -44,7 +45,9 @@
         # Setting to git 2.0 default to suppress warning message
         default = simple
 [user]
-	signingkey = 779726D6596D2341
+	signingkey = 333EA196D54DDCC8
+	name = Chris Paul
+	email = cpaul@squareup.com
 [commit]
 	gpgsign = true
 # so much color
