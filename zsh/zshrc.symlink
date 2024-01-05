@@ -46,3 +46,9 @@ setopt SHARE_HISTORY          # share history between sessions
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 autoload -Uz compinit
 compinit
+
+[[ -f "$HOME/.aliases" ]] && source "$HOME/.aliases"
+[[ -f "$HOME/.localaliases" ]] && source "$HOME/.localaliases"
+
+
+export GPG_TTY=$(tty)

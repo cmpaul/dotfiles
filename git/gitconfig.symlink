@@ -95,3 +95,5 @@
 	mailmap = true
 [init]
 	defaultBranch = main
+[user]
+	signingkey = 2C6C7AC98F9BFCC0
