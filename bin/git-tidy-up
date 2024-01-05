@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Tidy up your git workspace by removing unused commits and branches
+
+AGGRESSIVE=0
+
+function usage () {
+     echo "usage $0: [--aggressive] [--branch <name>]"
+     echo "  Remove unused objects and refs from your local git repo"
+     echo ""
+     echo "  --aggressive: add a git gc --aggressive and other attempts to remove more junk"
+     echo "  --branch <name>: prune the specified branch (defaults to remote default branch)"
+}
+
+branch=`git remote set-head origin -a|awk '{print $4}'`
+argv=("$@")
+for ((i=0; i<$#; i++)); do
+  arg="${argv[i]}"
+  case "$arg" in
+    --aggressive)
+      AGGRESSIVE=1
+      ;;
+    --branch)
+      if [[ "$i"+1 -ge "$#" ]] ; then
+        echo "no branch argument provided"
+        usage
+        exit 1
+      fi
+      branch="${argv[$i+1]}"
+      i="$i"+1
+      ;;
+    --help)
+      usage
+      exit 1
+      ;;
+    *)
+      echo "unrecognized argument: $arg"
+      usage
+      exit 1
+  esac
+done
+
+set -x
+
+# Remove unused commits pulled from origin
+git remote prune origin
+
+# Remove branches that have been merged to master or the specified branch (except for the one you are on)
+git branch --merged "$branch" | grep -v "$branch" |  grep -v "\*" | grep -v "$(git rev-parse --abbrev-ref HEAD)" | xargs -n 1 git branch -d
+
+# Remove MY branches from remote if they have been merged to master or the specified branch
+git branch -a --merged "$branch" | grep -E "remotes/origin/$USER[_./-]" | \
+  sed 's/remotes\/origin\///' | xargs -n1 -I{} git push --delete origin {}
+
+# Remove commits not pointed to by any branch locally
+if [[ "${AGGRESSIVE}" = 0 ]] ; then
+    # This is usually enough
+    git prune origin/"$branch"
+else
+    git gc --aggressive
+    git fsck --unreachable
+    git repack -a -d -l
+fi

@@ -23,5 +23,6 @@ brew upgrade
 
 # Install software
 # I don't currently have any of these, so ignore for now
-# echo "› $DOTFILES/script/install.sh"
-# $DOTFILES/script/start.sh
+echo "› $DOTFILES/script/install.sh"
+
+$DOTFILES/script/start.sh

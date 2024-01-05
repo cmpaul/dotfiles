@@ -1,4 +1,5 @@
 [user]
+        signingkey = AUTHORSIGNINGKEY
         name = AUTHORNAME
         email = AUTHOREMAIL
 [credential]

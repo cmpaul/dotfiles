@@ -1,10 +1,43 @@
-# Local/private config goes in the include
 [include]
         path = ~/.gitconfig.local
-[hub]
-        protocol = ssh
 [alias]
-        co         = checkout
+	c          = commit -m
+	a          = add
+	di         = diff
+	dic        = diff --cached
+	pl         = pull
+	ps         = push
+	plre       = pull --rebase
+	s          = status
+	st         = status
+	out        = log origin..HEAD
+	ci         = commit
+	co         = checkout
+	cp         = cherry-pick
+	b          = branch
+	changed    = diff --name-status -r
+	add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+	au         = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+	ch         = diff --name-status -r
+	cosu       = !sh -c 'git checkout $0 && git submodule update --init'
+	ignored    = "!git ls-files --others --exclude-standard"
+	lg         = log --all --graph --abbrev-commit --date=relative --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
+	lgb        = log --graph --abbrev-commit --date=relative --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
+	track      = !sh -c 'git branch --track "$0" "origin/$0" && git checkout "$0"'
+	whatis     = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+	touchdown  = merge --no-ff
+	integrate  = merge --no-ff
+	td         = merge --no-ff
+	lastauthor = log -1 --format='%Cgreen%an <%ae>'
+	reauthor   = commit --amend --reset-author -C HEAD
+	publish    = push -u
+	tree       = log --graph --decorate --pretty=oneline --abbrev-commit
+	hist       = log --pretty=format:\"%C(yellow)%h %ad%Creset | %s%C(bold red)%d%Creset [%C(bold blue)%an%Creset]\" --graph --date=short
+	pf         = push --force-with-lease
+	nit        = commit --amend --no-edit
+	praise     = blame
+	git        = !exec git
+	lb         = branch -v --sort=committerdate
         count      = !git shortlog -sn
         cleanup    = !git gc && $DOTFILES/bin/git-prune
         cpbranch   = !$DOTFILES/bin/git-copy-branch-name
@@ -17,61 +50,48 @@
         up         = !$DOTFILES/bin/git-up
         wtf        = !$DOTFILES/bin/git-wtf
         fixup      = "!git add . && git commit --fixup=${1:-$(git rev-parse HEAD)} && GIT_EDITOR=true git rebase --interactive --autosquash ${1:-$(git rev-parse HEAD~2)}~1"
-[color]
-        diff = auto
-        status = auto
-        branch = auto
-        ui = true
 [core]
         excludesfile = ~/.gitignore
         editor = vim
+        hooksPath = ~/.dotfiles/git-hooks
+        # Helpful for large repositories
+        fsmonitor = true
+	untrackedcache = true
 [apply]
         whitespace = nowarn
-[merge]
-        # tool = bc3
-[mergetool]
-        keepBackup = false
-        bc3 = trustExitCode
+[push]
+	config = default
+	default = current
 [diff]
-        # tool = bc3
-[difftool]
-        prompt = false
+	renames = true
+	indentHeuristic = on
+[branch]
+	autosetupmerge = true
+[rebase]
+	autosquash = true
+	autostash = true
+[merge]
+	summary = true
+	conflictstyle = diff3
 [help]
         autocorrect = 1
-[push]
-        # See `git help config` (search for push.default)
-        # for more information on different options of the below setting.
-        #
-        # Setting to git 2.0 default to suppress warning message
-        default = simple
-[user]
-	signingkey = 333EA196D54DDCC8
-	name = Chris Paul
-	email = cpaul@squareup.com
 [commit]
 	gpgsign = true
-# so much color
-[color "diff"]
-	meta = yellow bold
-	commit = green bold
-	frag = magenta bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
-[color "diff-highlight"]
-	oldNormal = "red bold"
-	oldHighlight = "red bold 52"
-	newNormal = "green bold"
-	newHighlight = "green bold 22"
-[color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
-[color "status"]
-	added = yellow
-	changed = green
-	untracked = cyan
-[pager]
-	log = diff-highlight | less
-	show = diff-highlight | less
-	diff = diff-highlight | less
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+[rerere]
+	enabled = 1
+[pull]
+	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[log]
+	mailmap = true
+[init]
+	defaultBranch = main

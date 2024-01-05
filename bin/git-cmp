@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+require 'cgi'
+
+if ARGV[0] == '-h'
+  puts <<-USAGE
+USAGE: By default compares the current branch with master.
+       If you pass a branch name as an argument it will compare
+       the current branch versus the specified branch.
+  USAGE
+  exit 0
+end
+
+current_branch = `git branch --show-current`.chomp
+repo_url = `git config remote.origin.url`.chomp.sub(/(ssh:\/\/)?git@|(.*:\/\/)/, '').sub(/.git$/, '').sub(/:/, '/')
+
+# Multiple teams are adopting `main` as their default branch name. This check
+# allows us to guarantee the PR is open on the right branch.
+regex_result = /origin\/HEAD -> origin\/(?<main>.*)\n/.match(`git branch -r`)
+main_branch = regex_result ? regex_result[:main] : 'master'
+repo_url.slice!(/.*@/)
+"https://#{repo_url}/compare/#{ARGV[0] || main_branch}...#{current_branch}?expand=1#files_bucket"
+
+`open #{url.inspect}`

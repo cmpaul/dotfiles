@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+if [[ $1 == "-h" || (( "$#" > 2)) ]]; then
+  echo "Test if a commit has been merged into a branch"
+  echo ""
+  echo "Usage: $(basename "${0}") <commit> <branch> "
+  echo "  commit: (optional) If no args, use HEAD"
+  echo "  branch: (optional) If omitted, use origin/master"
+  exit 1
+fi
+
+if (( "$#" < 1)); then
+  commit="HEAD"
+else
+  commit=$1
+fi
+
+if (( "$#" < 2)); then
+  dest='origin/master'
+else
+  dest=$2;
+fi
+
+
+parsed_commit=$(git rev-parse --verify $commit)
+parsed_dest=$(git rev-parse --verify $dest)
+
+$(git merge-base --is-ancestor $parsed_commit $parsed_dest)
+gmbresult=$?
+if (( $gmbresult == 0)); then
+  tput setaf 1
+  echo "${commit} has been merged into $dest"
+  echo ""
+  git --no-pager log -n 1 ${1}
+else
+  tput bold
+  tput setaf 5
+  echo "$commit IS **NOT*** in $dest"
+fi
+tput sgr0
+exit $gmbresult

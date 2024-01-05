@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+# Open the file or directory in browser to Stash or GitHub to more easily share the code (uses current branch)
+
+require 'cgi'
+
+if ARGV[0] == '-h'
+  puts <<-USAGE
+USAGE:
+git webview: open the current directory
+git webview FILENAME: open the given file
+  USAGE
+  exit 0
+end
+
+repo_url = `git config remote.origin.url`.chomp.sub(/(ssh:\/\/)?git@|(.*:\/\/)/, '').sub(/.git$/, '').sub(/:/, '/')
+branch = `git branch --show-current`.chomp
+gitpath = `git rev-parse --show-toplevel`.chomp
+base = `basename "#{ARGV[0]}"`.chomp
+dirname = `dirname "#{ARGV[0]}"`.chomp
+abspath = `cd "#{dirname}" && pwd -P`.chomp
+
+relpath = "#{abspath}/#{base}"
+relpath.slice!(gitpath)
+repo_url.slice!(/.*@/)
+"https://#{repo_url}/tree/#{branch}#{relpath}"
+
+`open #{url.inspect}`

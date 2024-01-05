@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Open the stash PR for the given commit
+
+set -o pipefail
+
+if [ $# -gt 1 ]; then
+  echo "Find the PR for the given commit"
+  echo ""
+  echo "Usage: $(basename "${0}") <sha>"
+  echo "  sha: If empty, use the HEAD commit"
+  echo ""
+  echo "NOTE: The PR must have already been merged"
+  exit 1
+fi
+
+config_files_dir=$(dirname $(realpath "$0"))/..
+source $config_files_dir/lib.sh/echo.sh
+source $config_files_dir/lib.sh/gh.sh
+
+commit=$(get_commit "$@") || exit 1
+
+# Determine the org/repo.
+remote_origin_url=$(git config remote.origin.url)
+
+if [[ $remote_origin_url == *"github.com"* ]]; then
+  repo_url=$(git config remote.origin.url | sed -e 's/^org-49461806@\(.*\):\(.*\)$/git:\/\/\1\/\2/' | sed 's/^.*\/\/\(.*\).git$/\1/' | sed -e 's/\org-49461806@//')
+  org=$(echo $repo_url | awk -F '/' '{ print $(NF-1) }')
+else
+  repo_url=$(git config remote.origin.url | sed -e 's/^git@\(.*\):\(.*\)$/git:\/\/\1\/\2/' | sed 's/^.*\/\/\(.*\).git$/\1/' | sed -e 's/\git@//')
+  project=$(echo $repo_url | awk -F '/' '{ print $(NF-1) }')
+fi
+
+repo=$(echo $repo_url | awk -F '/' '{ print $(NF) }')
+
+
+# First, try using the GitHub API to find a PR associated to the commit.
+
+if [ -n "$org" ]; then
+  install_gh
+  url=$(gh api "repos/:owner/:repo/commits/$commit/pulls" | jq -r '.[].html_url')
+  if [ -n "$url" ]; then
+    echo "$url"
+    exit 0
+  fi
+fi
+
+
+# If that failed, revert to "guessing" based on the commit message of the merge
+# commit.  (Note that this doesn't work with all merge strategies!)
+
+merge=$(git-find-merge $@)
+if [ $? != 0 ]; then
+  exit 1
+fi
+
+pr=$(git log -n1 ${merge} 2>/dev/null | grep "Merge pull request #" | head -n 1 | sed  's%^.*Merge pull request #\([[:digit:]]*\).*%\1%')
+gh_pr=$(git log -n1 ${merge} 2>/dev/null | grep "(#" | head -n 1 | sed  's%^.*#\([[:digit:]]*\).*%\1%')
+
+if [[ "$pr" == "" && "$gh_pr" == "" ]]; then
+  echo "Could not find PR # for ${merge}" >&2
+  exit 1
+fi
+
+merge_unix_timestamp=$(git show --no-patch --format=%ct ${merge})
+if [ "$pr" != "" ]; then
+  url="https://github.com/$org/$repo/pull/$pr"
+else
+  url="https://github.com/$org/$repo/pull/$gh_pr"
+fi
+
+echo $url
+exit 0

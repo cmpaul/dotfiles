@@ -48,12 +48,28 @@ setup_gitconfig () {
     read -e git_authorname
     user ' - What is your github author email?'
     read -e git_authoremail
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
+    user ' - Enter a passphrase for your GPG signing key:'
+    read -e git_gpgpassphrase
+
+    # Generate a GPG Github signing key
+    echo -e "Key-Type: RSA\nKey-Length: 4096\nSubkey-Type: RSA\nSubkey-Length: 4096\nName-Real: $git_authorname\nName-Email: $git_authoremail\nExpire-Date: 0\nPassphrase: $git_gpgpassphrase\n" | gpg --batch --generate-key
+
+    # Get the key ID
+    KEYID=$(gpg --list-secret-keys --keyid-format=LONG | grep ^sec | awk '{print $2}' | cut -d '/' -f 2)
+
+    # Export the GPG key
+    gpg --armor --export $KEYID > publickey.asc
+    success "gpg key $KEYID exported"
+
+    sed -e "s/AUTHORNAME/$git_authorname/g" \
+        -e "s/AUTHOREMAIL/$git_authoremail/g" \
+        -e "s/AUTHORSIGNINGKEY/$KEYID/g" \
+        -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" \
+        git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
 
     success 'gitconfig'
   fi
 }
-
 
 link_file () {
   local src=$1 dst=$2
@@ -143,7 +159,6 @@ install_dotfiles () {
 }
 
 setup_hostname
-setup_gitconfig
 install_dotfiles
 
 # If we're on a Mac, let's install and setup homebrew.
@@ -157,6 +172,22 @@ then
     fail "error installing dependencies"
   fi
 fi
+
+install_gnupg() {
+  if ! [ -x "$(command -v gpg)" ]; then
+    info 'installing gnupg'
+    if [ "$(uname -s)" == "Darwin" ]
+    then
+      brew install gnupg
+    else
+      sudo apt-get install gnupg
+    fi
+    success 'gnupg installed'
+  fi
+}
+
+install_gnupg
+setup_gitconfig
 
 echo ''
 echo '  All installed!'

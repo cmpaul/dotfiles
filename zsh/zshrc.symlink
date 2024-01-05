@@ -1,0 +1,48 @@
+# Allow more open files than the OSX default of 256
+if [ `ulimit -n` -lt 8192 ]; then
+    ulimit -n 8192
+fi
+
+# correct typos
+# setopt correctall
+
+# unique values only in $PATH
+typeset -U path PATH
+
+# Check if a path exists
+function append_to_path {
+  if [ -d "$1" ]; then
+    path+=$1
+  fi
+}
+
+function prepend_to_path {
+  if [ -d "$1" ]; then
+    path=($1 $path)
+  fi
+}
+
+# don't confirm * in rm -rf
+setopt RM_STAR_SILENT
+
+# automatically enter directories without cd
+setopt auto_cd
+
+prepend_to_path /usr/local/share/npm/bin
+append_to_path /opt/local/bin
+append_to_path /opt/local/sbin
+
+# history
+export HISTFILE=~/.zhistory   # History savefile location
+export HISTSIZE=1000000       # Number of history items to save in memory
+export SAVEHIST=1000000       # Number of history items to save in file
+setopt APPEND_HISTORY         # multiple sessions append to same history file (rather than last)
+setopt HIST_IGNORE_ALL_DUPS   # when adding a new entry delete older duplicates
+setopt HIST_IGNORE_DUPS       # don't add a new entry if it's an immediate duplicate
+setopt INC_APPEND_HISTORY     # adds history incrementally to share it across sessions
+setopt SHARE_HISTORY          # share history between sessions
+
+# Setup zsh completions for homebrew formulas (from https://docs.brew.sh/Shell-Completion)
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+autoload -Uz compinit
+compinit

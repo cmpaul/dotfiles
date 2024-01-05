@@ -1,0 +1,80 @@
+# Convenient stuff
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+alias l="ls -Gal"
+alias ls="ls -G"
+alias ll="ls -Ghal"
+alias empties="find . -empty -type d -maxdepth 2"
+alias pg="ps ax | grep -v grep | grep -i "
+alias ip="ifconfig | grep 'inet '"
+
+function profile {
+  $EDITOR ~/.zprofile && source ~/.zprofile
+}
+function aliases {
+  $EDITOR ~/.aliases && source ~/.aliases
+}
+
+alias df='df -h'
+alias ducks='du -cksh * | sort -rh|head -11' # Lists folders and files sizes in the current folder
+alias f='find . -iname'
+alias gr='grep -r' # Recursive grep
+alias m='less'
+alias systail='tail -f /var/log/system.log'
+alias top='top -o cpu'
+# Shows most used commands, from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
+alias profileme="history | awk '{print \$4}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
+
+# Git
+alias ch="git diff --ignore-space-at-eol | $EDITOR"
+alias chc="git diff --cached --ignore-space-at-eol | $EDITOR"
+alias current_branch="git symbolic-ref HEAD | cut -d / -f 3"
+alias gaa="git add --all && git status"
+alias gadd="git add --all && git status"
+alias gap="git add --patch"
+alias gb='git branch -v'
+alias gbr="git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname)' | cut -d / -f 3-"
+alias gca='git commit -v --all'
+alias gcam='git commit --amend'
+alias gcb='git checkout -b'
+alias gcf="git checkout -f"
+alias gch="git log ORIG_HEAD.. --stat --no-merges"
+alias gci='git commit -v'
+alias gcia='git commit -v --all'
+alias gclean="git clean -dff && git submodule foreach git clean -dff"
+alias gcp="git checkout --patch"
+alias gcv='git commit -v'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gdh='git diff HEAD'
+alias gdm='git diff origin/$(git_default_branch_name)'
+alias gfd='git push -f origin head:canary'
+alias git-user="$EDITOR ~/.gitconfig"
+alias gl="git log --date=local"
+alias gmm='git merge $(git_default_branch_name)'
+alias gps="git pull && git submodule sync && git submodule update --init --recursive"
+alias grc="git rebase --continue"
+alias grim='git rebase --interactive $(git_default_branch_name)'
+alias grm="git status | grep 'deleted:' | sed -e 's/^.*deleted: *//' -e 's/^/\"/g' -e 's/$/\"/g' | xargs -n1 git rm"
+alias gs='git status'
+alias gss='git status --short --branch'
+alias gu="$EDITOR ~/.gitconfig"
+alias gum='echo "Resetting $(git_default_branch_name) to the latest origin/$(git_default_branch_name)..." && git fetch && git update-ref refs/heads/$(git_default_branch_name) origin/$(git_default_branch_name)'
+alias grum='gum && git rebase $(git_default_branch_name)'
+alias ungreen="git log --abbrev-commit --reverse --pretty=format:'%C(yellow)%h%Creset %C(bold)%s%Creset %an' origin/ci-master-distributed-latest..origin/master"
+
+# OS-X Specific
+alias lockscreen='/System/Library/CoreServices/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine'
+
+function gco {
+  if [[ $# == 0 ]]; then
+    git checkout master
+  else
+    git checkout "$@"
+  fi
+}
+
+# If Xcode keeps messing up your ssh agent use this to restart the agent and fix it
+alias kick-ssh-agent='killall ssh-agent; eval "$(ssh-agent -s)" && ssh-add -K'
