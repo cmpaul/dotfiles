@@ -38,18 +38,20 @@
 	praise     = blame
 	git        = !exec git
 	lb         = branch -v --sort=committerdate
-        count      = !git shortlog -sn
-        cleanup    = !git gc && $DOTFILES/bin/git-prune
-        cpbranch   = !$DOTFILES/bin/git-copy-branch-name
-        credit     = !$DOTFILES/bin/git-credit
-        nuke       = !$DOTFILES/bin/git-nuke
-        credit     = !$DOTFILES/bin/git-credit
-        promote    = !$DOTFILES/bin/git-promote
-        track      = !$DOTFILES/bin/git-track
-        undo       = !$DOTFILES/bin/git-undo
-        up         = !$DOTFILES/bin/git-up
-        wtf        = !$DOTFILES/bin/git-wtf
-        fixup      = "!git add . && git commit --fixup=${1:-$(git rev-parse HEAD)} && GIT_EDITOR=true git rebase --interactive --autosquash ${1:-$(git rev-parse HEAD~2)}~1"
+	count      = !git shortlog -sn
+	cleanup    = !git gc && $DOTFILES/bin/git-prune
+	cmp        = !$DOTFILES/bin/git-cmp
+	cpbranch   = !$DOTFILES/bin/git-copy-branch-name
+	credit     = !$DOTFILES/bin/git-credit
+	nuke       = !$DOTFILES/bin/git-nuke
+	credit     = !$DOTFILES/bin/git-credit
+	promote    = !$DOTFILES/bin/git-promote
+	tidy-up    = !$DOTFILES/bin/git-tidy-up
+	track      = !$DOTFILES/bin/git-track
+	undo       = !$DOTFILES/bin/git-undo
+	up         = !$DOTFILES/bin/git-up
+	wtf        = !$DOTFILES/bin/git-wtf
+	fixup      = "!git add . && git commit --fixup=${1:-$(git rev-parse HEAD)} && GIT_EDITOR=true git rebase --interactive --autosquash ${1:-$(git rev-parse HEAD~2)}~1"
 [core]
         excludesfile = ~/.gitignore
         editor = vim

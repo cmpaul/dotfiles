@@ -18,6 +18,6 @@ repo_url = `git config remote.origin.url`.chomp.sub(/(ssh:\/\/)?git@|(.*:\/\/)/,
 regex_result = /origin\/HEAD -> origin\/(?<main>.*)\n/.match(`git branch -r`)
 main_branch = regex_result ? regex_result[:main] : 'master'
 repo_url.slice!(/.*@/)
-"https://#{repo_url}/compare/#{ARGV[0] || main_branch}...#{current_branch}?expand=1#files_bucket"
+url = "https://#{repo_url}/compare/#{ARGV[0] || main_branch}...#{current_branch}?expand=1#files_bucket"
 
 `open #{url.inspect}`
