@@ -70,11 +70,12 @@ alias lockscreen='/System/Library/CoreServices/ScreenSaverEngine.app/Contents/Ma
 
 function gco {
   if [[ $# == 0 ]]; then
-    git checkout master
+    local default=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+    git checkout "${default:-main}"
   else
     git checkout "$@"
   fi
 }
 
 # If Xcode keeps messing up your ssh agent use this to restart the agent and fix it
-alias kick-ssh-agent='killall ssh-agent; eval "$(ssh-agent -s)" && ssh-add -K'
+alias kick-ssh-agent='killall ssh-agent; eval "$(ssh-agent -s)" && ssh-add --apple-use-keychain'

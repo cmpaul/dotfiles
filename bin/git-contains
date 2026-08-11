@@ -15,7 +15,8 @@ else
 fi
 
 if (( "$#" < 2)); then
-  dest='origin/master'
+  default=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+  dest="origin/${default:-main}"
 else
   dest=$2;
 fi
