@@ -1,10 +1,7 @@
 #!/usr/bin/env sh
 
-config_files_dir=$(dirname $(realpath "$0"))/..
-source $config_files_dir/lib.sh/echo.sh
-
-if [[ " $@ " =~ " -h " ]] || [[ " $@ " =~ " --help " ]]; then
-  echo "\033[1mUSAGE\033[0m
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  printf "\033[1mUSAGE\033[0m
    git fixup
 
 \033[1mEXAMPLES\033[0m
@@ -15,21 +12,14 @@ if [[ " $@ " =~ " -h " ]] || [[ " $@ " =~ " --help " ]]; then
    Pass options through to \`git commit\` as you otherwise would
 
       \$ git fixup --allow-empty --verbose
-
-   Learn more about fixup commits: \033[34;4mgo/fixup-commits\033[0m
-
-\033[1mSUPPORT\033[0m
-   Ask in \033[34m#devenv\033[0m
 "
-
   exit 0
 fi
 
-# Install fzf on-demand
-# https://github.com/junegunn/fzf#using-homebrew
-if ! which fzf > /dev/null; then
-  announce "Installing fzf"
-  echo_run "brew install fzf" || exit 1
+if ! command -v fzf > /dev/null; then
+  echo "Installing fzf..." && brew install fzf || exit 1
 fi
 
-echo_run "git commit --fixup=\$(git log --oneline --grep=\"^fixup\" --invert-grep | fzf | cut -f1 -d' ') $@"
+commit=$(git log --oneline --grep="^fixup" --invert-grep | fzf | cut -f1 -d' ')
+[ -z "$commit" ] && exit 1
+git commit --fixup="$commit" "$@"

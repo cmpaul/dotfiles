@@ -1,43 +1,37 @@
 #!/usr/bin/env bash
+# Find the merge commit on the default branch for the given commit
 
 set -o pipefail
 
-if [ "$1" == "-h" ] || (( $# > 1 )); then
-  echo "Find the merge commit in origin/master for the given commit"
+if [ "$1" = "-h" ] || (( $# > 1 )); then
+  echo "Find the merge commit for the given commit"
   echo ""
-  echo "Usage: $(basename "${0}") <sha>"
-  echo "  <sha>: (optional) If no sha is given, finds merge of HEAD"
+  echo "Usage: $(basename "${0}") [<sha>]"
+  echo "  <sha>: defaults to HEAD"
   exit 1
 fi
 
-config_files_dir=$(dirname $(realpath "$0"))/..
-source $config_files_dir/lib.sh/echo.sh
-source $config_files_dir/lib.sh/gh.sh
+commit=$(git rev-parse "${1:-HEAD}") || exit 1
+default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+default_branch=${default_branch:-main}
 
-commit=$(get_commit "$@") || exit 1
+# Already a merge commit?
+git rev-parse "${commit}^2" &>/dev/null && echo "$commit" && exit 0
 
-# First, check if this merge is a merge commit
-git rev-parse ${commit}^2 &>/dev/null \
-  && echo $commit && exit 0
+# Squash merge?
+git show --summary "$commit" | grep -q "Merge pull request #" \
+  && git show --summary "$commit" | grep -q "Squashed commit of the following:" \
+  && echo "$commit" && exit 0
 
-# For commits merged with the merge strategy `--squash`, #{commit}^2 does
-# not exist, because the branch commits are squashed into a single non-merge
-# commit on the target branch. To identify these, grep for the magic terms
-git show --summary ${commit} | grep -q "Merge pull request #" \
-  && git show --summary ${commit} | grep -q "Squashed commit of the following:" \
-  && echo $commit && exit 0
+# Try GitHub API
+merge=$(gh api "repos/:owner/:repo/commits/$commit/pulls" 2>/dev/null | jq -r '.[].merge_commit_sha' | head -1)
+[ -n "$merge" ] && echo "$merge" && exit 0
 
-# Default to use GitHub's API. This is more robust for merges done through
-# GitHub's UI.
-install_gh
-merge=$(gh api repos/:owner/:repo/commits/$commit/pulls | jq -r '.[].merge_commit_sha')
-[ -n "$merge" ] && echo $merge && exit 0
-
-# If the GitHub API does not have data, it probably means we're in a megarepo
-# where git metadata was truncated at ~2 years. Try to find the merge commit
-# manually.
-merge=$(perl -ne 'print if ($seen{$_} .= @ARGV) =~ /10$/' <(git rev-list --ancestry-path ${commit}..origin/master) <(git rev-list --first-parent ${commit}..origin/master) | tail -n 1)
-[ -n "$merge" ] && echo $merge && exit 0
+# Manual ancestry search
+merge=$(perl -ne 'print if ($seen{$_} .= @ARGV) =~ /10$/' \
+  <(git rev-list --ancestry-path "${commit}..origin/${default_branch}") \
+  <(git rev-list --first-parent "${commit}..origin/${default_branch}") | tail -n 1)
+[ -n "$merge" ] && echo "$merge" && exit 0
 
 echo "Unable to find merge commit for ${commit}" >&2
 exit 1

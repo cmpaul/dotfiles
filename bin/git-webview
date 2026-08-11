@@ -22,6 +22,6 @@ abspath = `cd "#{dirname}" && pwd -P`.chomp
 relpath = "#{abspath}/#{base}"
 relpath.slice!(gitpath)
 repo_url.slice!(/.*@/)
-"https://#{repo_url}/tree/#{branch}#{relpath}"
+url = "https://#{repo_url}/tree/#{branch}#{relpath}"
 
 `open #{url.inspect}`
