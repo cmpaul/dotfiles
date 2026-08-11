@@ -17,12 +17,8 @@ brew "nmap"
 # Build tools
 brew "cmake"
 
-# Node version management
-brew "nvm"
-
-# Python version management
-brew "pyenv"
-brew "pyenv-virtualenv"
+# Runtime version management (Node, Python, and more)
+brew "mise"
 
 # Infrastructure
 brew "awscli"
