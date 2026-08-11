@@ -132,90 +132,13 @@ else
     log_info "No merged branches to remove"
 fi
 
-log_section "Detecting squash-merged local branches"
-current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-# Get list of branches to check and count them
-all_branches=($(git branch | grep -v "\*" | grep -v "$branch" | grep -v "$current_branch" | sed 's/^[ \t]*//'))
-
-# Smart filtering: only check branches that are reasonable candidates for squash-merge
-branches_to_check=()
-target_commit_date=$(git log -1 --format="%ct" "$branch" 2>/dev/null)
-
-log_progress "Pre-filtering ${#all_branches[@]} branches for squash-merge candidates..."
-
-for branch_name in "${all_branches[@]}"; do
-    if [[ -n "$branch_name" ]]; then
-        # Quick checks to skip obviously non-squash-merged branches
-        
-        # Skip if branch doesn't have a merge-base (unrelated history)
-        merge_base=$(git merge-base "$branch" "$branch_name" 2>/dev/null)
-        if [[ -z "$merge_base" ]]; then
-            continue
-        fi
-        
-        # Skip if branch is ahead of target (not merged yet)
-        if git merge-base --is-ancestor "$branch" "$branch_name" 2>/dev/null; then
-            continue
-        fi
-        
-        # Skip very old branches (older than 6 months before target branch)
-        branch_commit_date=$(git log -1 --format="%ct" "$branch_name" 2>/dev/null)
-        if [[ -n "$target_commit_date" && -n "$branch_commit_date" ]]; then
-            # Skip if branch is older than 6 months before target branch last commit
-            six_months_ago=$((target_commit_date - 15552000)) # 6 months in seconds
-            if [[ $branch_commit_date -lt $six_months_ago ]]; then
-                continue
-            fi
-        fi
-        
-        # Skip branches with too many unique commits (likely not squash-merged)
-        unique_commits=$(git rev-list --count "$merge_base..$branch_name" 2>/dev/null)
-        if [[ -n "$unique_commits" && $unique_commits -gt 50 ]]; then
-            continue
-        fi
-        
-        branches_to_check+=("$branch_name")
-    fi
-done
-
-total_branches=${#branches_to_check[@]}
-filtered_out=$((${#all_branches[@]} - total_branches))
-
-if [[ $filtered_out -gt 0 ]]; then
-    log_info "Filtered out $filtered_out branches (too old, ahead, or too many commits)"
-fi
-
-if [[ $total_branches -gt 0 ]]; then
-    log_progress "Analyzing $total_branches filtered branches for squash-merge detection..."
-    squash_count=0
-    current_index=0
-    
-    for branch_name in "${branches_to_check[@]}"; do
-        if [[ -n "$branch_name" ]]; then
-            ((current_index++))
-            log_progress_item "$current_index" "$total_branches" "Deleting $branch_name"
-            
-            # Skip expensive cherry check - just delete all filtered branches
-            if git branch -D "$branch_name" 2>/dev/null; then
-                log_branch_removed "$branch_name (filtered/assumed squash-merged)"
-                ((squash_count++))
-            fi
-        fi
-    done
-else
-    squash_count=0
-fi
-if [[ $squash_count -gt 0 ]]; then
-    log_success "Removed $squash_count squash-merged branches"
-else
-    log_info "No squash-merged branches to remove"
-fi
 
 # Aggressive mode: Remove local branches that don't exist on remote
 if [[ "${AGGRESSIVE}" = 1 ]]; then
     log_section "Removing local branches without remote counterparts (aggressive mode)"
     
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
     # Get all local branches except current and main branch
     local_branches=($(git branch | grep -v "\*" | grep -v "$branch" | grep -v "$current_branch" | sed 's/^[ \t]*//'))
     orphaned_branches=()
@@ -266,77 +189,7 @@ if [[ -n "$merged_remote_branches" ]]; then
     done <<< "$merged_remote_branches"
 fi
 
-log_section "Removing squash-merged remote branches (yours only)"
-
-# Get list of remote branches to check and apply smart filtering
-all_remote_branches=($(git branch -r | grep -E "origin/$USER[_./-]" | sed 's/origin\///'))
-remote_branches_to_check=()
-
-if [[ ${#all_remote_branches[@]} -gt 0 ]]; then
-    log_progress "Pre-filtering ${#all_remote_branches[@]} remote branches for squash-merge candidates..."
-    
-    for remote_branch in "${all_remote_branches[@]}"; do
-        if git show-ref --verify --quiet "refs/remotes/origin/$remote_branch"; then
-            # Quick checks to skip obviously non-squash-merged remote branches
-            
-            # Skip if branch doesn't have a merge-base (unrelated history)
-            merge_base=$(git merge-base "$branch" "origin/$remote_branch" 2>/dev/null)
-            if [[ -z "$merge_base" ]]; then
-                continue
-            fi
-            
-            # Skip if remote branch is ahead of target (not merged yet)
-            if git merge-base --is-ancestor "$branch" "origin/$remote_branch" 2>/dev/null; then
-                continue
-            fi
-            
-            # Skip very old remote branches (older than 6 months before target branch)
-            remote_commit_date=$(git log -1 --format="%ct" "origin/$remote_branch" 2>/dev/null)
-            if [[ -n "$target_commit_date" && -n "$remote_commit_date" ]]; then
-                six_months_ago=$((target_commit_date - 15552000)) # 6 months in seconds
-                if [[ $remote_commit_date -lt $six_months_ago ]]; then
-                    continue
-                fi
-            fi
-            
-            # Skip remote branches with too many unique commits (likely not squash-merged)
-            unique_commits=$(git rev-list --count "$merge_base..origin/$remote_branch" 2>/dev/null)
-            if [[ -n "$unique_commits" && $unique_commits -gt 50 ]]; then
-                continue
-            fi
-            
-            remote_branches_to_check+=("$remote_branch")
-        fi
-    done
-    
-    remote_filtered_out=$((${#all_remote_branches[@]} - ${#remote_branches_to_check[@]}))
-    if [[ $remote_filtered_out -gt 0 ]]; then
-        log_info "Filtered out $remote_filtered_out remote branches (too old, ahead, or too many commits)"
-    fi
-fi
-
-total_remote_branches=${#remote_branches_to_check[@]}
-
-if [[ $total_remote_branches -gt 0 ]]; then
-    log_progress "Analyzing $total_remote_branches filtered remote branches for squash-merge detection..."
-    remote_squash_count=0
-    remote_index=0
-    
-    for remote_branch in "${remote_branches_to_check[@]}"; do
-        ((remote_index++))
-        log_progress_item "$remote_index" "$total_remote_branches" "Deleting origin/$remote_branch"
-        
-        # Skip expensive cherry check - just delete all filtered branches
-        if git push --delete origin "$remote_branch" 2>/dev/null; then
-            log_remote_removed "$remote_branch (filtered/assumed squash-merged)"
-            ((remote_squash_count++))
-        fi
-    done
-else
-    remote_squash_count=0
-fi
-
-total_remote=$((remote_count + remote_squash_count))
+total_remote=$((remote_count + 0))
 if [[ $total_remote -gt 0 ]]; then
     log_success "Removed $total_remote remote branches"
 else

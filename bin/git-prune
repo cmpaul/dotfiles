@@ -1,11 +1,57 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 #
-# Delete all local branches that have been merged into HEAD.
+# Delete all local branches that have been merged into HEAD,
+# excluding master/main and any branch used by a worktree.
 
-branches_to_delete=`git branch --merged | grep -v '^*' | grep -v 'master' | tr -d '\n'`
-if [ -z $branches_to_delete ]
-then
+set -e          # exit on error
+set -u          # error on unset variables
+set -o pipefail # fail a pipeline if any command fails
+
+# --- Collect branches that are used by worktrees ---------------------------
+
+# git worktree list --porcelain outputs lines like:
+#   branch refs/heads/your-branch
+worktree_branches=("${(@f)$(git worktree list --porcelain 2>/dev/null \
+  | sed -n 's/^branch //p' \
+  | sed 's#refs/heads/##')}")
+
+branch_has_worktree() {
+  local needle=$1
+  for b in "${worktree_branches[@]}"; do
+    [[ "$b" == "$needle" ]] && return 0
+  done
+  return 1
+}
+
+# --- Collect merged branches (strip decorations, skip master/main) --------
+
+merged_branches=("${(@f)$(git branch --merged \
+  | sed 's/^[*+ ]*//' \
+  | grep -vE '^(master|main)$')}")
+
+to_delete=()
+
+for br in "${merged_branches[@]}"; do
+  [[ -z "$br" ]] && continue
+
+  if branch_has_worktree "$br"; then
+    echo "Skipping $br (has an attached worktree)"
+  else
+    to_delete+=("$br")
+  fi
+done
+
+# --- Delete them -----------------------------------------------------------
+
+if (( ${#to_delete[@]} == 0 )); then
   echo "You're all up-to-date!"
 else
-  git branch -d $branches_to_delete
+  echo "Deleting merged branches:"
+  for br in "${to_delete[@]}"; do
+    echo "  $br"
+  done
+
+  # This expands to each branch name as a separate arg
+  git branch -d "${to_delete[@]}"
 fi
+
