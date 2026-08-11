@@ -55,7 +55,6 @@
 [core]
         excludesfile = ~/.gitignore
         editor = vim
-        hooksPath = ~/.dotfiles/git-hooks
         # Helpful for large repositories
         fsmonitor = true
 	untrackedcache = true
@@ -98,4 +97,5 @@
 [init]
 	defaultBranch = main
 [user]
-	signingkey = 2C6C7AC98F9BFCC0
+	signingkey = 853F6643804CDC2B
+	email = chris@tryrisotto.com

@@ -1,0 +1,38 @@
+tap "homebrew/services", trusted: true
+
+# Core shell and version control
+brew "git"
+brew "gnupg"
+brew "pinentry-mac"
+brew "zsh"
+
+# CLI essentials
+brew "gh"
+brew "git-lfs"
+brew "graphviz"
+brew "jq"
+brew "mkcert"
+brew "nmap"
+
+# Build tools
+brew "cmake"
+
+# Node version management
+brew "nvm"
+
+# Python version management
+brew "pyenv"
+brew "pyenv-virtualenv"
+
+# Infrastructure
+brew "awscli"
+brew "tfenv"
+
+# Apps
+cask "1password-cli"
+cask "gcloud-cli"
+cask "ngrok"
+
+# Python tools (via uv)
+uv "pre-commit"
+uv "ruff"

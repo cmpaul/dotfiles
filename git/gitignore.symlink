@@ -8,3 +8,9 @@
 .rbx
 node_modules
 /tags
+
+**/.claude/settings.local.json
+.Brewfile.local
+
+# Riptide artifacts (cloud-synced)
+.humanlayer/tasks/
