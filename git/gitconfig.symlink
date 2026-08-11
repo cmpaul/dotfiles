@@ -1,5 +1,3 @@
-[include]
-        path = ~/.gitconfig.local
 [alias]
 	c          = commit -m
 	a          = add
@@ -99,3 +97,6 @@
 [user]
 	signingkey = 853F6643804CDC2B
 	email = chris@tryrisotto.com
+
+[include]
+	path = ~/.gitconfig.local
