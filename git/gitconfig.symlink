@@ -21,7 +21,6 @@
 	ignored    = "!git ls-files --others --exclude-standard"
 	lg         = log --all --graph --abbrev-commit --date=relative --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
 	lgb        = log --graph --abbrev-commit --date=relative --pretty=format:'%C(bold blue)%h - %C(reset)%C(green)(%ar)%C(reset) - %s %C(dim)- %an%C(reset)%C(yellow)%d'
-	track      = !sh -c 'git branch --track "$0" "origin/$0" && git checkout "$0"'
 	whatis     = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	touchdown  = merge --no-ff
 	integrate  = merge --no-ff
@@ -39,10 +38,9 @@
 	count      = !git shortlog -sn
 	cleanup    = !git gc && $DOTFILES/bin/git-prune
 	cmp        = !$DOTFILES/bin/git-cmp
-	cpbranch   = !$DOTFILES/bin/git-copy-branch-name
+	cpbranch   = !git branch --show-current | pbcopy
 	credit     = !$DOTFILES/bin/git-credit
 	nuke       = !$DOTFILES/bin/git-nuke
-	credit     = !$DOTFILES/bin/git-credit
 	promote    = !$DOTFILES/bin/git-promote
 	tidy-up    = !$DOTFILES/bin/git-tidy-up
 	track      = !$DOTFILES/bin/git-track
@@ -59,7 +57,6 @@
 [apply]
         whitespace = nowarn
 [push]
-	config = default
 	default = current
 [diff]
 	renames = true
@@ -76,6 +73,7 @@
         autocorrect = 1
 [commit]
 	gpgsign = true
+	template = ~/.gitmessage
 [color]
 	diff = auto
 	status = auto
