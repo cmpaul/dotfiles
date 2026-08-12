@@ -43,4 +43,11 @@ brew upgrade
 # I don't currently have any of these, so ignore for now
 echo "› $DOTFILES/script/install.sh"
 
-$DOTFILES/script/start.sh
+# Stamp the successful run — the shell's monthly dot reminder checks this
+# (see _dot_reminder in zsh/zshrc.symlink). No explicit exit: bootstrap
+# sources this file, and an exit here would kill it.
+$DOTFILES/script/start.sh && {
+  STAMP_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles"
+  mkdir -p "$STAMP_DIR"
+  date +%s > "$STAMP_DIR/dot-lastrun"
+}

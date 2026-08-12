@@ -11,7 +11,10 @@ environment of every machine that installs them — be conservative.
   Brewfile via `bin/dot`, applies macOS defaults, generates
   `git/gitconfig.local.symlink` (name/email/GPG key) on first run.
 - `bin/dot` — periodic refresher: brew update/upgrade, then `script/start.sh`,
-  which runs every `topic/install.sh`.
+  which runs every `topic/install.sh`. Successful runs are stamped in
+  `~/.cache/dotfiles/dot-lastrun`; `_dot_reminder` in `zshrc.symlink` offers to
+  run it (with confirmation) when the stamp is 30+ days old. NB: a bare `dot`
+  in a shell resolves to graphviz's dot — use `$DOTFILES/bin/dot`.
 - macOS defaults (`osx/set-defaults.sh`) only run when `DOTFILES_SETDEFAULTS=1`
   is set (bootstrap sets it on a fresh, unnamed machine) or via
   `bin/set-defaults` — applying them rebuilds Spotlight and restarts apps.

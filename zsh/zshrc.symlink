@@ -122,7 +122,41 @@ function _secrets_reminder {
     fi
   done < "$SECRETS_CONF"
 }
+# Offer to run `dot` when it hasn't run in 30+ days, once per session after
+# the first prompt renders (a precmd would trip p10k instant prompt's output
+# check if it ran during zshrc). `dot` stamps successful runs, including
+# manual ones; declining snoozes the offer for a day so new tabs don't nag.
+function _dot_reminder {
+  add-zsh-hook -d precmd _dot_reminder
+
+  local stamp_dir="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles"
+  local now=$(date +%s) last=0 snoozed=0 reply
+  [[ -r "$stamp_dir/dot-lastrun" ]] && last=$(<"$stamp_dir/dot-lastrun")
+  [[ -r "$stamp_dir/dot-snooze" ]] && snoozed=$(<"$stamp_dir/dot-snooze")
+  [[ "$last" == <-> ]] || last=0
+  [[ "$snoozed" == <-> ]] || snoozed=0
+
+  (( now - last < 30 * 86400 )) && return 0
+  (( now - snoozed < 86400 )) && return 0
+
+  if read -t 30 -k 1 "reply?  ⟳ dotfiles: dot hasn't run in 30+ days — run it now? [y/N] "; then
+    print
+    if [[ "$reply" == [yY] ]]; then
+      # Absolute path: a bare `dot` resolves to graphviz's dot, which sorts
+      # earlier in $PATH via homebrew
+      "$DOTFILES/bin/dot"
+    else
+      mkdir -p "$stamp_dir"
+      print "$now" > "$stamp_dir/dot-snooze"
+    fi
+  else
+    # timed out with no answer — ask again next session
+    print
+  fi
+}
+
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _secrets_reminder
+add-zsh-hook precmd _dot_reminder
 
 export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
