@@ -2,13 +2,33 @@
 # Requires macOS 14 (Sonoma) or later. Commands targeting older OS versions have been removed.
 
 # Based on: http://mths.be/osx
+# Ask for the administrator password once. sudo's timestamp caching can be
+# disabled entirely (timestamp_timeout 0 on managed Macs), so don't rely on
+# it: capture the password up front and feed it to every sudo below through
+# a wrapper. It lives only in this process's memory, and the auth block stays
+# above `set -x` (with tracing suppressed in the wrapper) so it is never
+# echoed to the terminal.
+if ! sudo -n true 2>/dev/null
+then
+  printf 'Password (for sudo): '
+  read -rs DOTFILES_SUDO_PW
+  echo
+  until printf '%s\n' "$DOTFILES_SUDO_PW" | command sudo -S -p '' -v 2>/dev/null
+  do
+    printf 'Sorry, try again. Password (for sudo): '
+    read -rs DOTFILES_SUDO_PW
+    echo
+  done
+  sudo() {
+    { set +x; } 2>/dev/null
+    printf '%s\n' "$DOTFILES_SUDO_PW" | command sudo -S -p '' "$@"
+    local rc=$?
+    set -x
+    return $rc
+  }
+fi
+
 set -x
-
-# Ask for the administrator password upfront
-sudo -v
-
-# Keep-alive: update existing `sudo` time stamp until `.osx` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ###############################################################################
 # General UI/UX                                                               #
