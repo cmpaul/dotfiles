@@ -100,6 +100,14 @@ EOF
         -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" \
         git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
 
+    # install_dotfiles already ran, before this file existed — link it now so
+    # the include in gitconfig works on the first bootstrap run.
+    if ! [ -e "$HOME/.gitconfig.local" ]
+    then
+      ln -s "$DOTFILES_ROOT/git/gitconfig.local.symlink" "$HOME/.gitconfig.local"
+      success "linked $DOTFILES_ROOT/git/gitconfig.local.symlink to $HOME/.gitconfig.local"
+    fi
+
     success 'gitconfig'
   fi
 }

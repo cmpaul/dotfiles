@@ -23,6 +23,16 @@ fi
 # Install homebrew
 $DOTFILES/homebrew/install.sh 2>&1
 
+# On a fresh machine brew was just installed by a child process and isn't on
+# this shell's PATH yet
+if ! command -v brew >/dev/null 2>&1; then
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi
+
 # Upgrade & upgrade homebrew
 echo "› brew update"
 brew update
