@@ -19,6 +19,13 @@ install Homebrew and the packages in `homebrew/Brewfile`, set macOS defaults,
 and set up git with a GPG signing key. Everything is configured and tweaked
 within `~/.dotfiles`.
 
+There's no need to install Homebrew yourself first — bootstrap does it. If
+you did (or its installer told you to `echo ... >> ~/.zprofile`), skip those
+instructions: `zsh/zprofile.symlink` already wires up `brew shellenv`, and
+appending would either create a stray `~/.zprofile` that conflicts with the
+symlink at bootstrap time (choose overwrite if prompted) or dirty the repo
+file through it.
+
 To keep things fresh later, run `~/.dotfiles/bin/dot` — it updates Homebrew
 packages and re-runs the topic installers. The shell also offers to run it
 for you (with a y/N confirmation) when opening a terminal if it hasn't run

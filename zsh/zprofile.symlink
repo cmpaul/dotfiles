@@ -1,4 +1,10 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew's installer suggests appending its own shellenv lines here — don't:
+# this covers it (and tolerates a fresh machine where brew isn't installed yet)
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 # Machine-specific profile additions (secrets, work config) — not tracked
 [ -f "$HOME/.zprofile.local" ] && source "$HOME/.zprofile.local"
