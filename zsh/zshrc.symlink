@@ -72,26 +72,55 @@ esac
 [ -s "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 # Secrets live in 1Password — pull them into the environment only when needed,
-# so no keys sit in plaintext on disk. Signs in to 1Password first if the
-# session doesn't already have a valid token.
+# so no keys sit in plaintext on disk. The env var → 1Password mapping lives
+# in zsh/secrets.conf. Signs in to 1Password first if the session doesn't
+# already have a valid token.
+export SECRETS_CONF="$DOTFILES/zsh/secrets.conf"
+
 function load-secrets {
+  local name ref val loaded=()
+
+  if [[ ! -f "$SECRETS_CONF" ]]; then
+    print -P "%F{red}✗ no secrets mapping at $SECRETS_CONF%f"
+    return 1
+  fi
+
   op whoami >/dev/null 2>&1 || eval "$(op signin)"
-  export OPENAI_API_KEY="$(op read 'op://Private/OpenAI API Key/credential')"
-  print -P "%F{8} ╭─╮%f"
-  print -P "%F{8}┌┴──┐%f %F{green}✓ secrets loaded%f %F{8}(OPENAI_API_KEY)%f"
-  print -P "%F{8}└───┘%f"
+
+  while IFS='=' read -r name ref; do
+    [[ -z "$name" || "$name" == \#* ]] && continue
+    if val="$(op read "$ref" 2>/dev/null)" && [[ -n "$val" ]]; then
+      export "$name"="$val"
+      loaded+=("$name")
+    else
+      print -P "%F{red}✗ failed to read $name from $ref%f"
+    fi
+  done < "$SECRETS_CONF"
+
+  if (( ${#loaded} )); then
+    print -P "%F{8} ╭─╮%f"
+    print -P "%F{8}┌┴──┐%f %F{green}✓ secrets loaded%f %F{8}(${(j:, :)loaded})%f"
+    print -P "%F{8}└───┘%f"
+  fi
 }
 
-# Show a reminder once per session when secrets aren't loaded. Runs after the
-# first prompt renders so it doesn't trip p10k instant prompt's output check.
+# Show a reminder once per session when any mapped secret isn't loaded. Runs
+# after the first prompt renders so it doesn't trip p10k instant prompt's
+# output check.
 function _secrets_reminder {
   add-zsh-hook -d precmd _secrets_reminder
-  if [[ -z "$OPENAI_API_KEY" ]]; then
-    print -P "%F{8}  ╭─╮%f"
-    print -P "%F{8} ┌┴─┴┐%f  %F{yellow}secrets not loaded%f"
-    print -P "%F{8} │ ● │%f  run %F{cyan}load-secrets%f to sign in to 1Password and export API keys"
-    print -P "%F{8} └───┘%f"
-  fi
+  local name ref
+  [[ -f "$SECRETS_CONF" ]] || return 0
+  while IFS='=' read -r name ref; do
+    [[ -z "$name" || "$name" == \#* ]] && continue
+    if [[ -z "${(P)name}" ]]; then
+      print -P "%F{8}  ╭─╮%f"
+      print -P "%F{8} ┌┴─┴┐%f  %F{yellow}secrets not loaded%f"
+      print -P "%F{8} │ ● │%f  run %F{cyan}load-secrets%f to sign in to 1Password and export API keys"
+      print -P "%F{8} └───┘%f"
+      return 0
+    fi
+  done < "$SECRETS_CONF"
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _secrets_reminder
