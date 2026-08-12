@@ -28,6 +28,14 @@ fail () {
 }
 
 setup_hostname() {
+  # Only prompt on a machine that hasn't been named yet
+  current_name=$(scutil --get ComputerName 2>/dev/null)
+  if [ -n "$current_name" ]
+  then
+    success "hostname already set to $current_name (skipping)"
+    return
+  fi
+
   user ' - What should the hostname be?'
   read -e dotfiles_hostname
   export dotfiles_hostname

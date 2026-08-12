@@ -1,0 +1,4 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Machine-specific profile additions (secrets, work config) — not tracked
+[ -f "$HOME/.zprofile.local" ] && source "$HOME/.zprofile.local"

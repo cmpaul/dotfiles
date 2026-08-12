@@ -1,7 +1,10 @@
-# The Brewfile handles Homebrew-based app and library installs, but there may
-# still be updates and installables in the Mac App Store. There's a nifty
-# command line interface to it that we can use to just install everything, so
-# yeah, let's do that.
+# Install macOS software updates. This can take a long time and needs sudo,
+# so it only runs when explicitly requested:
+#   DOTFILES_SOFTWAREUPDATE=1 bin/dot
 
-echo "› sudo softwareupdate -i -a"
-sudo softwareupdate -i -a
+if [ "$DOTFILES_SOFTWAREUPDATE" = "1" ]; then
+  echo "› sudo softwareupdate -i -a"
+  sudo softwareupdate -i -a
+else
+  echo "› skipping macOS software update (set DOTFILES_SOFTWAREUPDATE=1 to run)"
+fi
