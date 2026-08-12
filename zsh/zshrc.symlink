@@ -77,7 +77,9 @@ esac
 function load-secrets {
   op whoami >/dev/null 2>&1 || eval "$(op signin)"
   export OPENAI_API_KEY="$(op read 'op://Private/OpenAI API Key/credential')"
-  echo "✓ secrets loaded (OPENAI_API_KEY)"
+  print -P "%F{8} ╭─╮%f"
+  print -P "%F{8}┌┴──┐%f %F{green}✓ secrets loaded%f %F{8}(OPENAI_API_KEY)%f"
+  print -P "%F{8}└───┘%f"
 }
 
 # Show a reminder once per session when secrets aren't loaded. Runs after the
@@ -85,7 +87,10 @@ function load-secrets {
 function _secrets_reminder {
   add-zsh-hook -d precmd _secrets_reminder
   if [[ -z "$OPENAI_API_KEY" ]]; then
-    print -P "%F{yellow}secrets not loaded — run %F{cyan}load-secrets%F{yellow} to sign in to 1Password and export API keys%f"
+    print -P "%F{8}  ╭─╮%f"
+    print -P "%F{8} ┌┴─┴┐%f  %F{yellow}secrets not loaded%f"
+    print -P "%F{8} │ ● │%f  run %F{cyan}load-secrets%f to sign in to 1Password and export API keys"
+    print -P "%F{8} └───┘%f"
   fi
 }
 autoload -Uz add-zsh-hook
