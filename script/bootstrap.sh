@@ -48,18 +48,38 @@ setup_gitconfig () {
     read -e git_authorname
     user ' - What is your github author email?'
     read -e git_authoremail
-    user ' - Enter a passphrase for your GPG signing key:'
-    read -e git_gpgpassphrase
 
-    # Generate a GPG Github signing key
-    echo -e "Key-Type: RSA\nKey-Length: 4096\nSubkey-Type: RSA\nSubkey-Length: 4096\nName-Real: $git_authorname\nName-Email: $git_authoremail\nExpire-Date: 0\nPassphrase: $git_gpgpassphrase\n" | gpg --batch --generate-key
+    # Reuse an existing GPG key for this email if one exists
+    KEYID=$(gpg --list-secret-keys --keyid-format=LONG "$git_authoremail" 2>/dev/null \
+      | grep ^sec | awk '{print $2}' | cut -d '/' -f 2 | head -1)
 
-    # Get the key ID
-    KEYID=$(gpg --list-secret-keys --keyid-format=LONG | grep ^sec | awk '{print $2}' | cut -d '/' -f 2)
+    if [ -n "$KEYID" ]
+    then
+      success "found existing GPG key $KEYID for $git_authoremail"
+    else
+      user ' - Enter a passphrase for your GPG signing key (leave empty for no passphrase):'
+      read -s git_gpgpassphrase
+      echo
 
-    # Export the GPG key
-    gpg --armor --export $KEYID > publickey.asc
-    success "gpg key $KEYID exported"
+      gpg --batch --generate-key <<EOF
+Key-Type: RSA
+Key-Length: 4096
+Subkey-Type: RSA
+Subkey-Length: 4096
+Name-Real: $git_authorname
+Name-Email: $git_authoremail
+Expire-Date: 0
+Passphrase: $git_gpgpassphrase
+EOF
+
+      KEYID=$(gpg --list-secret-keys --keyid-format=LONG "$git_authoremail" \
+        | grep ^sec | awk '{print $2}' | cut -d '/' -f 2 | head -1)
+    fi
+
+    # Export the public key — add this to GitHub Settings > SSH and GPG keys
+    gpg --armor --export "$KEYID" > "$HOME/gpg-public-key.asc"
+    success "GPG public key exported to ~/gpg-public-key.asc"
+    info '  → Add it at https://github.com/settings/gpg/new'
 
     sed -e "s/AUTHORNAME/$git_authorname/g" \
         -e "s/AUTHOREMAIL/$git_authoremail/g" \

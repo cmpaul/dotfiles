@@ -92,9 +92,7 @@
 	mailmap = true
 [init]
 	defaultBranch = main
-[user]
-	signingkey = 853F6643804CDC2B
-	email = chris@tryrisotto.com
-
 [include]
 	path = ~/.gitconfig.local
+[tag]
+	gpgSign = true
