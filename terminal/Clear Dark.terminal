@@ -175,11 +175,11 @@
 	<key>FontAntialias</key>
 	<true/>
 	<key>FontHeightSpacing</key>
-	<real>1.0</real>
+	<real>1</real>
 	<key>FontWidthSpacing</key>
 	<integer>1</integer>
 	<key>ProfileCurrentVersion</key>
-	<real>2.09</real>
+	<real>2.0899999999999999</real>
 	<key>SelectionColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
@@ -189,6 +189,8 @@
 	ohYYWE5TT2JqZWN0CBEaJCkyN0lMUVNXXWRqd36nqauwu8TMzwAAAAAAAAEBAAAAAAAA
 	ABkAAAAAAAAAAAAAAAAAAADY
 	</data>
+	<key>ShouldLimitScrollback</key>
+	<integer>0</integer>
 	<key>TextBoldColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMS
