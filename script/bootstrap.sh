@@ -39,6 +39,11 @@ setup_hostname() {
   user ' - What should the hostname be?'
   read -e dotfiles_hostname
   export dotfiles_hostname
+
+  # A machine with no name is a fresh machine: apply macOS defaults too
+  # (set-defaults.sh is also what applies the hostname collected above).
+  # On re-runs bin/dot skips defaults unless DOTFILES_SETDEFAULTS=1 is set.
+  export DOTFILES_SETDEFAULTS=1
 }
 
 setup_gitconfig () {

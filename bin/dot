@@ -9,8 +9,16 @@ export DOTFILES=$HOME/.dotfiles
 # Don't show last login date
 touch ~/.hushlogin
 
-# Set OS X defaults
-$DOTFILES/osx/set-defaults.sh
+# Set OS X defaults. Applying them is disruptive (rebuilds the Spotlight
+# index, restarts Finder/Dock/Terminal, needs sudo), so it only runs when
+# explicitly requested:
+#   DOTFILES_SETDEFAULTS=1 bin/dot
+# or run bin/set-defaults directly.
+if [ "$DOTFILES_SETDEFAULTS" = "1" ]; then
+  $DOTFILES/osx/set-defaults.sh
+else
+  echo "› skipping macOS defaults (set DOTFILES_SETDEFAULTS=1 or run set-defaults to apply)"
+fi
 
 # Install homebrew
 $DOTFILES/homebrew/install.sh 2>&1

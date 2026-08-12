@@ -10,8 +10,11 @@ environment of every machine that installs them — be conservative.
   `~/.<basename>` (e.g. `zsh/zshrc.symlink` → `~/.zshrc`), installs Homebrew +
   Brewfile via `bin/dot`, applies macOS defaults, generates
   `git/gitconfig.local.symlink` (name/email/GPG key) on first run.
-- `bin/dot` — periodic refresher: macOS defaults, brew update/upgrade, then
-  `script/start.sh`, which runs every `topic/install.sh`.
+- `bin/dot` — periodic refresher: brew update/upgrade, then `script/start.sh`,
+  which runs every `topic/install.sh`.
+- macOS defaults (`osx/set-defaults.sh`) only run when `DOTFILES_SETDEFAULTS=1`
+  is set (bootstrap sets it on a fresh, unnamed machine) or via
+  `bin/set-defaults` — applying them rebuilds Spotlight and restarts apps.
 - macOS `softwareupdate` only runs when `DOTFILES_SOFTWAREUPDATE=1` is set.
 - Bootstrap is idempotent: it skips existing correct symlinks, prompts on
   conflicts, and skips the hostname prompt if the machine is already named.

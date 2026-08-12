@@ -19,9 +19,11 @@ install Homebrew and the packages in `homebrew/Brewfile`, set macOS defaults,
 and set up git with a GPG signing key. Everything is configured and tweaked
 within `~/.dotfiles`.
 
-To keep things fresh later, run `dot` (in `bin/`) — it re-applies macOS
-defaults and updates Homebrew packages. Pass `DOTFILES_SOFTWAREUPDATE=1` to
-also install macOS software updates.
+To keep things fresh later, run `dot` (in `bin/`) — it updates Homebrew
+packages and re-runs the topic installers. The disruptive extras are opt-in:
+pass `DOTFILES_SETDEFAULTS=1` to re-apply macOS defaults (or run
+`set-defaults` directly), and `DOTFILES_SOFTWAREUPDATE=1` to install macOS
+software updates.
 
 ## Layout
 
