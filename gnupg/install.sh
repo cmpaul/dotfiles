@@ -21,16 +21,30 @@ if [ ! -f "$AGENT_CONF" ]
 then
   PINENTRY=$(find_pinentry)
 
+  # NB: only gpg-agent options belong here — an unknown option (e.g. a
+  # gpg.conf one like no-emit-version) stops the agent from starting at all,
+  # which breaks key generation with "No agent running".
   cat > "$AGENT_CONF" <<EOF
 default-cache-ttl 600
 max-cache-ttl 7200
 pinentry-program $PINENTRY
-no-emit-version
 EOF
 
   chmod 600 "$AGENT_CONF"
   echo "  gpg-agent.conf created (pinentry: $PINENTRY)"
 else
+  # Strip no-emit-version if an earlier version of this script wrote it:
+  # it's a gpg.conf option, and gpg-agent refuses to start on unknown
+  # options ("No agent running" during key generation).
+  if grep -q '^no-emit-version' "$AGENT_CONF"
+  then
+    grep -v '^no-emit-version' "$AGENT_CONF" > "$AGENT_CONF.tmp"
+    chmod 600 "$AGENT_CONF.tmp"
+    mv "$AGENT_CONF.tmp" "$AGENT_CONF"
+    gpgconf --kill gpg-agent 2>/dev/null || true
+    echo "  gpg-agent.conf: removed invalid no-emit-version option"
+  fi
+
   # Repair a stale pinentry path (e.g. after an Intel → Apple Silicon move)
   CURRENT=$(sed -n 's/^pinentry-program[[:space:]]*//p' "$AGENT_CONF")
   if [ -n "$CURRENT" ] && [ ! -x "$CURRENT" ]
