@@ -3,9 +3,15 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
-alias l="ls -Gal"
-alias ls="ls -G"
-alias ll="ls -Ghal"
+if command -v eza >/dev/null; then
+  alias ls="eza"
+  alias l="eza -la --git"
+  alias ll="eza -la --git"
+else
+  alias l="ls -Gal"
+  alias ls="ls -G"
+  alias ll="ls -Ghal"
+fi
 alias empties="find . -empty -type d -maxdepth 2"
 alias pg="ps ax | grep -v grep | grep -i "
 alias ip="ifconfig | grep 'inet '"
@@ -19,8 +25,8 @@ function aliases {
 
 alias df='df -h'
 alias ducks='du -cksh * | sort -rh|head -11' # Lists folders and files sizes in the current folder
-alias f='find . -iname'
-alias gr='grep -r' # Recursive grep
+command -v fd >/dev/null && alias f='fd' || alias f='find . -iname'
+command -v rg >/dev/null && alias gr='rg' || alias gr='grep -r' # Recursive grep
 alias m='less'
 alias systail='tail -f /var/log/system.log'
 alias top='top -o cpu'
@@ -28,9 +34,18 @@ alias top='top -o cpu'
 alias profileme="history | awk '{print \$4}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
 
 # Git
+function git_default_branch_name {
+  local ref=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)
+  if [[ -n "$ref" ]]; then
+    echo "${ref#origin/}"
+  else
+    echo main
+  fi
+}
+
 alias ch="git diff --ignore-space-at-eol | $EDITOR"
 alias chc="git diff --cached --ignore-space-at-eol | $EDITOR"
-alias current_branch="git symbolic-ref HEAD | cut -d / -f 3"
+alias current_branch="git branch --show-current"
 alias gaa="git add --all && git status"
 alias gadd="git add --all && git status"
 alias gap="git add --patch"
