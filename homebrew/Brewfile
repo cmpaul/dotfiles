@@ -1,5 +1,3 @@
-tap "homebrew/services", trusted: true
-
 # Core shell and version control
 brew "git"
 brew "gnupg"
