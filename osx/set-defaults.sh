@@ -499,12 +499,13 @@ defaults write com.apple.spotlight orderedItems -array \
     '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
     '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
     '{"enabled" = 0;"name" = "SOURCE";}'
-# Load new settings before rebuilding the index
+# Restart mds so it picks up the new settings
 killall mds > /dev/null 2>&1
 # Make sure indexing is enabled for the main volume
 sudo mdutil -i on / > /dev/null
-# Rebuild the index from scratch
-sudo mdutil -E / > /dev/null
+# NB: no `mdutil -E /` here — this script runs on every `dot`, and erasing and
+# rebuilding the whole Spotlight index each time costs hours of reindexing.
+# Run it manually if the category changes above ever need a forced reindex.
 
 ###############################################################################
 # Terminal & iTerm 2                                                          #
@@ -601,9 +602,11 @@ defaults write com.apple.archiveutility dearchive-move-after -string "~/.Trash"
 # Kill affected applications                                                  #
 ###############################################################################
 
+# Terminal and iTerm are deliberately not on this list: this script runs on
+# every `dot`, and killing them would abort the very run that invoked it.
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-    "Dock" "Finder" "iTerm" "Mail" "Messages" "Safari" "SystemUIServer" \
-    "iCal" "Terminal"; do
+    "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
+    "iCal"; do
     killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."

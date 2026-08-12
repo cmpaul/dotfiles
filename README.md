@@ -26,12 +26,11 @@ appending would either create a stray `~/.zprofile` that conflicts with the
 symlink at bootstrap time (choose overwrite if prompted) or dirty the repo
 file through it.
 
-To keep things fresh later, run `~/.dotfiles/bin/dot` — it updates Homebrew
-packages and re-runs the topic installers. The shell also offers to run it
-for you (with a y/N confirmation) when opening a terminal if it hasn't run
-in 30+ days; declining snoozes the offer for a day. The disruptive extras are opt-in:
-pass `DOTFILES_SETDEFAULTS=1` to re-apply macOS defaults (or run
-`set-defaults` directly), and `DOTFILES_SOFTWAREUPDATE=1` to install macOS
+To keep things fresh later, run `~/.dotfiles/bin/dot` — it re-applies macOS
+defaults (asks for sudo), updates Homebrew packages, and re-runs the topic
+installers. The shell also offers to run it for you (with a y/N confirmation)
+when opening a terminal if it hasn't run in 30+ days; declining snoozes the
+offer for a day. Pass `DOTFILES_SOFTWAREUPDATE=1` to also install macOS
 software updates.
 
 ## Layout

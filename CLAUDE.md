@@ -10,14 +10,15 @@ environment of every machine that installs them — be conservative.
   `~/.<basename>` (e.g. `zsh/zshrc.symlink` → `~/.zshrc`), installs Homebrew +
   Brewfile via `bin/dot`, applies macOS defaults, generates
   `git/gitconfig.local.symlink` (name/email/GPG key) on first run.
-- `bin/dot` — periodic refresher: brew update/upgrade, then `script/start.sh`,
-  which runs every `topic/install.sh`. Successful runs are stamped in
+- `bin/dot` — periodic refresher: macOS defaults (`osx/set-defaults.sh`, needs
+  sudo), brew update/upgrade, then `script/start.sh`, which runs every
+  `topic/install.sh`. Successful runs are stamped in
   `~/.cache/dotfiles/dot-lastrun`; `_dot_reminder` in `zshrc.symlink` offers to
   run it (with confirmation) when the stamp is 30+ days old. NB: a bare `dot`
   in a shell resolves to graphviz's dot — use `$DOTFILES/bin/dot`.
-- macOS defaults (`osx/set-defaults.sh`) only run when `DOTFILES_SETDEFAULTS=1`
-  is set (bootstrap sets it on a fresh, unnamed machine) or via
-  `bin/set-defaults` — applying them rebuilds Spotlight and restarts apps.
+- `set-defaults.sh` must stay safe to re-run: no Spotlight reindex
+  (`mdutil -E`), and never `killall` Terminal/iTerm — it runs on every `dot`,
+  from the terminal that invoked it.
 - macOS `softwareupdate` only runs when `DOTFILES_SOFTWAREUPDATE=1` is set.
 - Bootstrap is idempotent: it skips existing correct symlinks, prompts on
   conflicts, and offers to keep (Enter) or change the current hostname —
