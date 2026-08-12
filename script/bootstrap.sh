@@ -56,10 +56,15 @@ setup_hostname() {
   esac
 
   info "setting hostname to $new_hostname (may prompt for your password)"
-  sudo scutil --set ComputerName "$new_hostname"
-  sudo scutil --set HostName "$new_hostname"
-  sudo scutil --set LocalHostName "$new_hostname"
-  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$new_hostname"
+  # A single sudo invocation asks for the password at most once, even where
+  # sudo's timestamp caching is disabled. Embedding $new_hostname is safe:
+  # it was validated to letters/digits/hyphens above.
+  sudo /bin/sh -c "
+    scutil --set ComputerName '$new_hostname'
+    scutil --set HostName '$new_hostname'
+    scutil --set LocalHostName '$new_hostname'
+    defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string '$new_hostname'
+  "
   success "hostname set to $new_hostname"
 }
 
