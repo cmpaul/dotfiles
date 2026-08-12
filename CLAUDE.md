@@ -43,8 +43,9 @@ environment of every machine that installs them — be conservative.
 - `osx/set-defaults.sh` — macOS defaults; `gnupg/install.sh` — GPG agent setup
 - `fonts/` — MesloLGS NF (patched font powerlevel10k needs), vendored from
   romkatv/powerlevel10k-media; installed into `~/Library/Fonts`
-- `terminal/` — `MesloLGS.terminal` profile for Terminal.app (MesloLGS NF
-  11pt), imported and set as default/startup profile by its `install.sh`
+- `terminal/` — `Clear Dark.terminal` profile for Terminal.app (the stock
+  Clear Dark profile with MesloLGS NF 11pt), imported and set as
+  default/startup profile by its `install.sh`
 
 ## zshrc ordering constraints (do not reorder)
 
