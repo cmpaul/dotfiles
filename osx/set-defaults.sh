@@ -14,14 +14,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # General UI/UX                                                               #
 ###############################################################################
 
-# Set computer name (as done via System Preferences → Sharing)
-# Only when bootstrap collected one — never blank an already-named machine
-if [ -n "$dotfiles_hostname" ]; then
-  sudo scutil --set ComputerName "$dotfiles_hostname"
-  sudo scutil --set HostName "$dotfiles_hostname"
-  sudo scutil --set LocalHostName "$dotfiles_hostname"
-  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$dotfiles_hostname"
-fi
+# The hostname is set by script/bootstrap.sh (setup_hostname), not here.
 
 # Set standby delay to 24 hours (default is 1 hour)
 sudo pmset -a standbydelay 86400

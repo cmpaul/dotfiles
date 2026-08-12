@@ -20,7 +20,8 @@ environment of every machine that installs them — be conservative.
   `bin/set-defaults` — applying them rebuilds Spotlight and restarts apps.
 - macOS `softwareupdate` only runs when `DOTFILES_SOFTWAREUPDATE=1` is set.
 - Bootstrap is idempotent: it skips existing correct symlinks, prompts on
-  conflicts, and skips the hostname prompt if the machine is already named.
+  conflicts, and offers to keep (Enter) or change the current hostname —
+  applied directly via scutil, not via set-defaults.sh.
 - **The `.symlink` suffix is the contract.** A new file meant for `$HOME` must
   end in `.symlink` and live one directory deep. After adding one, symlink it
   manually or re-run `script/bootstrap.sh`.

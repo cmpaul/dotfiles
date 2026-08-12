@@ -28,22 +28,39 @@ fail () {
 }
 
 setup_hostname() {
-  # Only prompt on a machine that hasn't been named yet
   current_name=$(scutil --get ComputerName 2>/dev/null)
+
   if [ -n "$current_name" ]
   then
-    success "hostname already set to $current_name (skipping)"
-    return
+    user " - Hostname is currently '$current_name'. Enter a new one to change it, or leave empty to keep:"
+  else
+    user ' - What should the hostname be?'
+
+    # A machine with no name is a fresh machine: apply macOS defaults too.
+    # On re-runs bin/dot skips defaults unless DOTFILES_SETDEFAULTS=1 is set.
+    export DOTFILES_SETDEFAULTS=1
   fi
 
-  user ' - What should the hostname be?'
-  read -e dotfiles_hostname
-  export dotfiles_hostname
+  read -e new_hostname
 
-  # A machine with no name is a fresh machine: apply macOS defaults too
-  # (set-defaults.sh is also what applies the hostname collected above).
-  # On re-runs bin/dot skips defaults unless DOTFILES_SETDEFAULTS=1 is set.
-  export DOTFILES_SETDEFAULTS=1
+  if [ -z "$new_hostname" ] || [ "$new_hostname" == "$current_name" ]
+  then
+    [ -n "$current_name" ] && success "hostname unchanged ($current_name)"
+    return 0
+  fi
+
+  # LocalHostName rejects anything beyond letters, digits, and hyphens
+  case "$new_hostname" in
+    *[!a-zA-Z0-9-]*)
+      fail "hostname may only contain letters, digits, and hyphens: '$new_hostname'" ;;
+  esac
+
+  info "setting hostname to $new_hostname (may prompt for your password)"
+  sudo scutil --set ComputerName "$new_hostname"
+  sudo scutil --set HostName "$new_hostname"
+  sudo scutil --set LocalHostName "$new_hostname"
+  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$new_hostname"
+  success "hostname set to $new_hostname"
 }
 
 setup_gitconfig () {
