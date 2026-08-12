@@ -74,7 +74,18 @@ setup_gitconfig () {
       read -s git_gpgpassphrase
       echo
 
-      gpg --batch --generate-key <<EOF
+      # An empty "Passphrase:" makes batch-mode gpg fail (or fall back to a
+      # pinentry prompt that can't work mid-bootstrap); %no-protection is the
+      # supported way to generate an unprotected key.
+      if [ -n "$git_gpgpassphrase" ]
+      then
+        gpg_protection="Passphrase: $git_gpgpassphrase"
+      else
+        gpg_protection="%no-protection"
+      fi
+
+      info 'generating GPG key (this can take a moment)'
+      if ! gpg --batch --generate-key <<EOF
 Key-Type: RSA
 Key-Length: 4096
 Subkey-Type: RSA
@@ -82,11 +93,16 @@ Subkey-Length: 4096
 Name-Real: $git_authorname
 Name-Email: $git_authoremail
 Expire-Date: 0
-Passphrase: $git_gpgpassphrase
+$gpg_protection
+%commit
 EOF
+      then
+        fail "GPG key generation failed for $git_authoremail (see gpg output above)"
+      fi
 
       KEYID=$(gpg --list-secret-keys --keyid-format=LONG "$git_authoremail" \
         | grep ^sec | awk '{print $2}' | cut -d '/' -f 2 | head -1)
+      [ -n "$KEYID" ] || fail "no GPG secret key found for $git_authoremail after generation"
     fi
 
     # Export the public key — add this to GitHub Settings > SSH and GPG keys
