@@ -30,7 +30,8 @@ environment of every machine that installs them — be conservative.
 ## Layout
 
 - `zsh/` — `zshrc.symlink`, `zprofile.symlink`, `aliases.symlink`,
-  `p10k.zsh.symlink` (Powerlevel10k prompt), `secrets.conf`
+  `p10k.zsh.symlink` (Powerlevel10k prompt), `secrets.conf`; `install.sh`
+  clones oh-my-zsh + powerlevel10k into `~/.oh-my-zsh` when missing
 - `git/` — `gitconfig.symlink` (delta pager, GPG signing, rebase/rerere),
   `gitignore.symlink`, `gitmessage.symlink`; `gitconfig.local.symlink` is
   machine-generated and **gitignored — never commit it**
