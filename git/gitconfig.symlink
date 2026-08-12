@@ -51,28 +51,40 @@
 [core]
         excludesfile = ~/.gitignore
         editor = vim
+        pager = delta
         # Helpful for large repositories
         fsmonitor = true
 	untrackedcache = true
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
 [apply]
         whitespace = nowarn
 [push]
 	default = current
+	autoSetupRemote = true
+[fetch]
+	prune = true
 [diff]
 	renames = true
 	indentHeuristic = on
+	colorMoved = default
 [branch]
 	autosetupmerge = true
+	sort = -committerdate
 [rebase]
 	autosquash = true
 	autostash = true
 [merge]
 	summary = true
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [help]
         autocorrect = 1
 [commit]
 	gpgsign = true
+	verbose = true
 	template = ~/.gitmessage
 [color]
 	diff = auto

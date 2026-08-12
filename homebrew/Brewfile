@@ -7,12 +7,17 @@ brew "pinentry-mac"
 brew "zsh"
 
 # CLI essentials
+brew "bat"
+brew "eza"
+brew "fd"
 brew "gh"
+brew "git-delta"
 brew "git-lfs"
 brew "graphviz"
 brew "jq"
 brew "mkcert"
 brew "nmap"
+brew "ripgrep"
 
 # Build tools
 brew "cmake"
