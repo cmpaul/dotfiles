@@ -28,7 +28,9 @@ software updates.
 ## Layout
 
 Everything's built around topic areas: `zsh/`, `git/`, `homebrew/`, `mise/`,
-`osx/`, `gnupg/`. Special behaviors:
+`osx/`, `gnupg/`, `fonts/` (MesloLGS NF, the patched font powerlevel10k
+needs), `terminal/` (a Terminal.app profile using it, set as the default).
+Special behaviors:
 
 - **bin/**: added to `$PATH`, so everything in it is available everywhere
   (including a set of `git-*` subcommands wired up as git aliases).
