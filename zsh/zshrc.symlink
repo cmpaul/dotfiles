@@ -71,10 +71,24 @@ esac
 # uv env shim (present when uv is installed via standalone installer)
 [ -s "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
-# Secrets live in 1Password — pull them into the environment only when needed
-# (e.g. `load-secrets && some-openai-tool`), so no keys sit in plaintext on disk.
+# Secrets live in 1Password — pull them into the environment only when needed,
+# so no keys sit in plaintext on disk. Signs in to 1Password first if the
+# session doesn't already have a valid token.
 function load-secrets {
+  op whoami >/dev/null 2>&1 || eval "$(op signin)"
   export OPENAI_API_KEY="$(op read 'op://Private/OpenAI API Key/credential')"
+  echo "✓ secrets loaded (OPENAI_API_KEY)"
 }
+
+# Show a reminder once per session when secrets aren't loaded. Runs after the
+# first prompt renders so it doesn't trip p10k instant prompt's output check.
+function _secrets_reminder {
+  add-zsh-hook -d precmd _secrets_reminder
+  if [[ -z "$OPENAI_API_KEY" ]]; then
+    print -P "%F{yellow}secrets not loaded — run %F{cyan}load-secrets%F{yellow} to sign in to 1Password and export API keys%f"
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _secrets_reminder
 
 export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
