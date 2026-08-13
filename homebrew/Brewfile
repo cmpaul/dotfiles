@@ -31,6 +31,7 @@ brew "tfenv"
 cask "1password-cli"
 cask "gcloud-cli"
 cask "ngrok"
+cask "visual-studio-code"
 
 # Python tools (via uv)
 uv "pre-commit"
