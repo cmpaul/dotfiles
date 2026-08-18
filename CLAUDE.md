@@ -55,6 +55,8 @@ environment of every machine that installs them — be conservative.
 2. Personal aliases (`~/.aliases`, `~/.localaliases`) are sourced **after**
    oh-my-zsh, deliberately: OMZ plugin aliases must not shadow them. The OMZ
    `git` plugin was removed for this reason — don't re-add it.
+   `~/.zshrc.local` is sourced **last**, at the very bottom, so machine-local
+   config can override everything above it.
 3. `compinit` runs only inside oh-my-zsh. Don't add a manual call (slow,
    duplicate). Use `$HOMEBREW_PREFIX` (set by zprofile) instead of spawning
    `brew --prefix`.
@@ -71,13 +73,21 @@ environment of every machine that installs them — be conservative.
   entry; a padlock reminder prints on new sessions while any mapped var is
   unset. To add a secret: create the 1Password item, add one line to
   `secrets.conf`.
+- Machine-specific mappings go in `~/.secrets.conf.local` (untracked, 600),
+  which `load-secrets` and `_secrets_reminder` read in addition to
+  `secrets.conf`. Same format. Never put secret *values* in
+  `~/.zprofile.local` — it's for env/PATH only.
 
 ## Conventions and expectations
 
 - Aliases are muscle memory — never rename or repurpose an existing alias
   without explicit approval. Machine-specific aliases belong in
-  `~/.localaliases`, packages in `~/.Brewfile.local`, env in
-  `~/.zprofile.local` (all untracked; keep it that way).
+  `~/.localaliases`, packages in `~/.Brewfile.local`, login env in
+  `~/.zprofile.local`, secret mappings in `~/.secrets.conf.local`, and any
+  other per-machine shell config in `~/.zshrc.local` (all untracked; keep it
+  that way). `script/bootstrap.sh` seeds a stub for each. **Never append
+  machine-specific config to a tracked `*.symlink` file** — that's what these
+  are for.
 - Commits are GPG-signed automatically (gitconfig), messages are lowercase
   imperative summaries with a body explaining why. Group changes logically.
 - Test before committing: `zsh -n <file>` for zsh, `bash -n` / `sh -n` for

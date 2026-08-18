@@ -146,6 +146,67 @@ EOF
   fi
 }
 
+# Machine-local override files: untracked, and sourced/read only when present.
+# Seed commented-out stubs so the pattern is discoverable instead of folklore —
+# an empty stub costs nothing and keeps machine config out of the repo.
+seed_local_file () {
+  local dst=$1 mode=$2
+
+  if [ -e "$dst" ]
+  then
+    # Consume the heredoc on stdin so the caller's content is discarded
+    cat > /dev/null
+    return 0
+  fi
+
+  cat > "$dst"
+  chmod "$mode" "$dst"
+  success "created $dst"
+}
+
+seed_local_files () {
+  info 'seeding machine-local override files'
+
+  seed_local_file "$HOME/.zshrc.local" 644 <<'EOF'
+# Machine-specific interactive shell config — not tracked in ~/.dotfiles.
+# Sourced last by ~/.zshrc, so it can override anything the tracked config
+# sets. Nothing here may write to stdout — powerlevel10k's instant prompt
+# flags any output during zshrc. To print at session start, use a one-shot
+# precmd hook (see _secrets_reminder in zsh/zshrc.symlink).
+EOF
+
+  seed_local_file "$HOME/.localaliases" 644 <<'EOF'
+# Machine-specific aliases — not tracked in ~/.dotfiles.
+# Sourced by ~/.zshrc after ~/.aliases, so definitions here win.
+# Edit with `localaliases`.
+EOF
+
+  seed_local_file "$HOME/.zprofile.local" 600 <<'EOF'
+# Machine-specific login-shell environment — not tracked in ~/.dotfiles.
+# Sourced by ~/.zprofile. Use this for PATH entries and env vars that should
+# exist in login shells (including non-interactive ones).
+#
+# Do NOT put secrets here. Secrets live in 1Password: add a mapping line to
+# ~/.secrets.conf.local and run `load-secrets`.
+EOF
+
+  seed_local_file "$HOME/.secrets.conf.local" 600 <<'EOF'
+# Machine-specific secret mappings — not tracked in ~/.dotfiles.
+# Read by load-secrets (zsh/zshrc.symlink) in addition to the tracked
+# zsh/secrets.conf. Values are 1Password references, never secrets themselves.
+#
+# Format (no spaces around the =):
+#   ENV_VAR=op://<vault>/<item>/<field>
+EOF
+
+  seed_local_file "$HOME/.Brewfile.local" 644 <<'EOF'
+# Machine-specific Homebrew packages — not tracked in ~/.dotfiles.
+# Installed by homebrew/install.sh after the shared Brewfile.
+#   brew "ripgrep"
+#   cask "some-app"
+EOF
+}
+
 link_file () {
   local src=$1 dst=$2
 
@@ -235,6 +296,7 @@ install_dotfiles () {
 
 setup_hostname
 install_dotfiles
+seed_local_files
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]

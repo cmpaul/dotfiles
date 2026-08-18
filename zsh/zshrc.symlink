@@ -76,26 +76,32 @@ esac
 # in zsh/secrets.conf. Signs in to 1Password first if the session doesn't
 # already have a valid token.
 export SECRETS_CONF="$DOTFILES/zsh/secrets.conf"
+# Machine-specific mappings live outside the repo so a work laptop can add
+# secrets without a commit. Same format; still references, never values.
+export SECRETS_CONF_LOCAL="$HOME/.secrets.conf.local"
 
 function load-secrets {
-  local name ref val loaded=()
+  local conf name ref val loaded=()
 
-  if [[ ! -f "$SECRETS_CONF" ]]; then
+  if [[ ! -f "$SECRETS_CONF" && ! -f "$SECRETS_CONF_LOCAL" ]]; then
     print -P "%F{red}✗ no secrets mapping at $SECRETS_CONF%f"
     return 1
   fi
 
   op whoami >/dev/null 2>&1 || eval "$(op signin)"
 
-  while IFS='=' read -r name ref; do
-    [[ -z "$name" || "$name" == \#* ]] && continue
-    if val="$(op read "$ref" 2>/dev/null)" && [[ -n "$val" ]]; then
-      export "$name"="$val"
-      loaded+=("$name")
-    else
-      print -P "%F{red}✗ failed to read $name from $ref%f"
-    fi
-  done < "$SECRETS_CONF"
+  for conf in "$SECRETS_CONF" "$SECRETS_CONF_LOCAL"; do
+    [[ -f "$conf" ]] || continue
+    while IFS='=' read -r name ref; do
+      [[ -z "$name" || "$name" == \#* ]] && continue
+      if val="$(op read "$ref" 2>/dev/null)" && [[ -n "$val" ]]; then
+        export "$name"="$val"
+        loaded+=("$name")
+      else
+        print -P "%F{red}✗ failed to read $name from $ref%f"
+      fi
+    done < "$conf"
+  done
 
   if (( ${#loaded} )); then
     print -P "%F{8} ╭─╮%f"
@@ -109,18 +115,20 @@ function load-secrets {
 # output check.
 function _secrets_reminder {
   add-zsh-hook -d precmd _secrets_reminder
-  local name ref
-  [[ -f "$SECRETS_CONF" ]] || return 0
-  while IFS='=' read -r name ref; do
-    [[ -z "$name" || "$name" == \#* ]] && continue
-    if [[ -z "${(P)name}" ]]; then
-      print -P "%F{8}  ╭─╮%f"
-      print -P "%F{8} ┌┴─┴┐%f  %F{yellow}secrets not loaded%f"
-      print -P "%F{8} │ ● │%f  run %F{cyan}load-secrets%f to sign in to 1Password and export API keys"
-      print -P "%F{8} └───┘%f"
-      return 0
-    fi
-  done < "$SECRETS_CONF"
+  local conf name ref
+  for conf in "$SECRETS_CONF" "$SECRETS_CONF_LOCAL"; do
+    [[ -f "$conf" ]] || continue
+    while IFS='=' read -r name ref; do
+      [[ -z "$name" || "$name" == \#* ]] && continue
+      if [[ -z "${(P)name}" ]]; then
+        print -P "%F{8}  ╭─╮%f"
+        print -P "%F{8} ┌┴─┴┐%f  %F{yellow}secrets not loaded%f"
+        print -P "%F{8} │ ● │%f  run %F{cyan}load-secrets%f to sign in to 1Password and export API keys"
+        print -P "%F{8} └───┘%f"
+        return 0
+      fi
+    done < "$conf"
+  done
 }
 # Offer to run `dot` when it hasn't run in 30+ days, once per session after
 # the first prompt renders (a precmd would trip p10k instant prompt's output
@@ -160,3 +168,8 @@ add-zsh-hook precmd _secrets_reminder
 add-zsh-hook precmd _dot_reminder
 
 export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
+
+# Machine-specific interactive config (not tracked). Loads last so it can
+# override anything above it. Same stdout rule as the rest of this file:
+# nothing sourced here may print, or p10k instant prompt flags the session.
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

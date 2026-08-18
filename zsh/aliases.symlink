@@ -22,6 +22,10 @@ function profile {
 function aliases {
   $EDITOR ~/.aliases && source ~/.aliases
 }
+# Machine-specific aliases, kept out of the dotfiles repo
+function localaliases {
+  $EDITOR ~/.localaliases && source ~/.localaliases
+}
 
 alias df='df -h'
 alias ducks='du -cksh * | sort -rh|head -11' # Lists folders and files sizes in the current folder
