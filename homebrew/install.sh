@@ -31,6 +31,16 @@ brew bundle --file="$DOTFILES/homebrew/Brewfile"
 if [ -f "$HOME/.Brewfile.local" ]; then
   echo "  Installing local Homebrew packages..."
   brew bundle --file="$HOME/.Brewfile.local"
+else
+  # Seed a stub so the override is discoverable. Nothing to bundle from it
+  # yet, so this deliberately runs instead of the bundle above, not before it.
+  cat > "$HOME/.Brewfile.local" <<'EOF'
+# Machine-specific Homebrew packages — not tracked in ~/.dotfiles.
+# Installed by homebrew/install.sh after the shared Brewfile.
+#   brew "ripgrep"
+#   cask "some-app"
+EOF
+  echo "  Created $HOME/.Brewfile.local"
 fi
 
 exit 0

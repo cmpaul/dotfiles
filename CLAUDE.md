@@ -31,7 +31,9 @@ environment of every machine that installs them — be conservative.
 
 - `zsh/` — `zshrc.symlink`, `zprofile.symlink`, `aliases.symlink`,
   `p10k.zsh.symlink` (Powerlevel10k prompt), `secrets.conf`; `install.sh`
-  clones oh-my-zsh + powerlevel10k into `~/.oh-my-zsh` when missing
+  clones oh-my-zsh + powerlevel10k into `~/.oh-my-zsh` when missing, and
+  seeds the untracked `~/.zshrc.local`, `~/.localaliases`, `~/.zprofile.local`,
+  and `~/.secrets.conf.local` stubs
 - `git/` — `gitconfig.symlink` (delta pager, GPG signing, rebase/rerere),
   `gitignore.symlink`, `gitmessage.symlink`; `gitconfig.local.symlink` is
   machine-generated and **gitignored — never commit it**
@@ -85,7 +87,9 @@ environment of every machine that installs them — be conservative.
   `~/.localaliases`, packages in `~/.Brewfile.local`, login env in
   `~/.zprofile.local`, secret mappings in `~/.secrets.conf.local`, and any
   other per-machine shell config in `~/.zshrc.local` (all untracked; keep it
-  that way). `script/bootstrap.sh` seeds a stub for each. **Never append
+  that way). `zsh/install.sh` seeds a stub for the shell ones and
+  `homebrew/install.sh` for `~/.Brewfile.local`, so `dot` backfills them on
+  older machines; both skip files that already exist. **Never append
   machine-specific config to a tracked `*.symlink` file** — that's what these
   are for.
 - Commits are GPG-signed automatically (gitconfig), messages are lowercase

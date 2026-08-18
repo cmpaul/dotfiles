@@ -50,9 +50,11 @@ Special behaviors:
 ## Machine-local overrides
 
 Anything that shouldn't follow you to another machine goes in one of these.
-They live in `$HOME`, never in the repo, and are picked up only when present —
-`script/bootstrap.sh` seeds a commented-out stub for each one so you don't have
-to remember the filenames. Nothing here is ever committed.
+They live in `$HOME`, never in the repo, and are picked up only when present.
+The topic installers seed a commented-out stub for each one, so you don't have
+to remember the filenames — which means `bin/dot` backfills them on machines
+set up before a given override existed. Existing files are never touched.
+Nothing here is ever committed.
 
 - `~/.zshrc.local` — machine-specific interactive shell config. Sourced last by
   `~/.zshrc`, so it can override anything the tracked config sets. Must not
